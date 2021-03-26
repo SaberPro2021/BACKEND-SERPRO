@@ -3,7 +3,7 @@ const IcfesModule = require('../model/icfesModule.model');
 const icfesTestModel = require('../model/icfesTest.model');
 
 //CONTROLLER'S STATEMENT
-const ModuloController = {};
+const ModuloController = {}; 
 
 //RETURN ALL MODULES
 ModuloController.getAll = async function(req, res) {
