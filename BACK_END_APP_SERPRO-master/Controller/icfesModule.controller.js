@@ -1,4 +1,5 @@
 require('../database/db.connection');
+const { ObjectId } = require('mongodb');
 const IcfesModule = require('../model/icfesModule.model');
 const icfesTestModel = require('../model/icfesTest.model');
 
@@ -6,7 +7,7 @@ const icfesTestModel = require('../model/icfesTest.model');
 const ModuloController = {}; 
 
 //RETURN ALL MODULES
-ModuloController.getAll = async function(req, res) {
+ModuloController.getAllModules = async function(req, res) {
     try {
         const data = await IcfesModule.find();
         res.json(data);
@@ -36,17 +37,16 @@ ModuloController.getModulesWithTests = async function(req, res) {
 }
 
 //CREATE A NEW MODULE
-ModuloController.post = async function(req, res) {
-
+ModuloController.createModule = async function(req, res) {
     if (req.body) {
         const icfesModules = new IcfesModule(req.body);
         icfesModules.save((err, response) => {
             if (err) {
-                response.status(500).send({
-                    message: 'error insertando preguntas'
+                res.status(500).send({
+                    message: 'error insertando modulo'
                 });
             }
-            res.send(response);
+            res.json(res);
         });
     } else {
         res.status(500).send({
@@ -56,8 +56,7 @@ ModuloController.post = async function(req, res) {
 }
 
 //CREATE A NEW MODULE BY A LIST
-ModuloController.saveAll = async function(req, res) {
-
+ModuloController.saveAllModule = async function(req, res) {
     if (req.body) {
         let Listresult = [];
         for (let item of req.body) {
@@ -65,9 +64,7 @@ ModuloController.saveAll = async function(req, res) {
             let result = await icfesModules.save();
             Listresult.push(result);
         }
-        res.send(Listresult)
-
-
+        res.json(Listresult)
     } else {
         res.status(500).send({
             message: 'error, the body is empty'
@@ -76,16 +73,62 @@ ModuloController.saveAll = async function(req, res) {
 }
 
 //DELETE MODULE
-ModuloController.delete = async function(req, res) {
+ModuloController.deleteModules = async function(req, res) {
     try {
-        const delModul = await Modulo.remove();
+        const delModul = await IcfesModule.remove();
         res.json(delModul);
-    } catch (err) {
+    } catch (err) { 
         console.log(err);
         res.status(500).send({
             message: 'some error ocurred'
         });
     }
 }
+
+//DELETE MODULE BY ID
+ModuloController.deleteByIdModule = async function(req, res) {
+    try {
+        const moduleId = req.params.moduleId;
+        const data = await IcfesModule.remove({
+            _id: ObjectId(moduleId)
+        });
+        res.json(data);
+    } catch (err) { 
+        console.log(err);
+        res.status(500).send({
+            message: 'some error ocurred'
+        });
+    }
+}
+
+//UPDATE MODULE
+ModuloController.updateModule = async function(req, res) {
+    try {
+        const moduleId = req.params.moduleId;
+        const icfesModules = new IcfesModule(req.body);
+        
+        var data = {
+            knowledgeArea : icfesModules.knowledgeArea,
+            type : icfesModules.type,
+            description : icfesModules.description,
+            evaluate : icfesModules.evaluate
+        }
+
+        const upModul = await IcfesModule.findByIdAndUpdate(moduleId, data,  async (err, response) => {
+            if (err) {
+                res.status(500).send({
+                    message: 'error modificando modulo'
+                });
+            }
+        });
+        res.json(upModul);
+    } catch (err) { 
+        console.log(err);
+        res.status(500).send({
+            message: 'some error ocurred'
+        });
+    }
+}
+
 
 module.exports = ModuloController;

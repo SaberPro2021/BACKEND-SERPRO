@@ -14,10 +14,13 @@ router.get('/question/:icfesModuleId/:amount', question.getRandomByModule);
 router.post('/question', question.post);
 
 //MODULE
-router.get('/module', icfesModule.getAll);
+router.get('/module', icfesModule.getAllModules);
 router.get('/moduleWithTests', icfesModule.getModulesWithTests);
-router.post('/module', icfesModule.post);
-router.post('/moduleAll', icfesModule.saveAll);
+router.post('/module', icfesModule.createModule);
+router.post('/moduleAll', icfesModule.saveAllModule);
+router.post('/moduleUpdate/:moduleId',icfesModule.updateModule);
+router.delete('/moduleDelete',icfesModule.deleteModules);
+router.delete('/moduleDelete/:moduleId',icfesModule.deleteByIdModule);
 
 //ICFES TEST
 router.get('/icfesTest', icfesTest.getAllTestWhitQuestions);
