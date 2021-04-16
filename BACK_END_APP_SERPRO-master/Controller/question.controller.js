@@ -1,5 +1,6 @@
 require('../database/db.connection');
 const { ObjectId } = require('mongodb');
+const questionModel = require('../model/question.model');
 const Question = require('../model/question.model');
 
 
@@ -84,5 +85,69 @@ QuestionController.getRandomByModule = async function(req, res) {
          });
     }
  };
+
+
+
+ // DELETE ALL QUESTIONS
+ QuestionController.deleteQuestion = async function(req, res) {
+    try {
+        const delQuestion = await Question.remove();
+        res.json(delQuestion);
+    } catch (err) { 
+        console.log(err);
+        res.status(500).send({
+            message: 'some error ocurred'
+        });
+    }
+}
+
+
+
+//DELETE QUESTION BY ID
+
+QuestionController.deleteByIdQuestion = async function(req, res) {
+    try {
+        const QuestionId = req.params.QuestionId;
+        const data = await Question.remove({
+            _id: ObjectId(QuestionId)
+        });
+        res.json(data);
+    } catch (err) { 
+        console.log(err);
+        res.status(500).send({
+            message: 'some error ocurred'
+        });
+    }
+}
+
+
+
+//UPDATE ICFES_TEST
+
+QuestionController.updateQuestion = async function(req, res) {
+    try {
+        const questionId = req.params.questionId;
+        const Questions = new questionModel(req.body);
+        
+        var data = {
+            title : Questions.title,
+            statement : Questions.statement,
+        }
+
+        const upQuestion = await Question.findByIdAndUpdate(questionId, data,  async (err, response) => {
+            if (err) {
+                res.status(500).send({
+                    message: 'error modificando icfesTest'
+                });
+            }
+        });
+        res.json(upQuestion);
+    } catch (err) { 
+        console.log(err);
+        res.status(500).send({
+            message: 'some error ocurred'
+        });
+    }
+}
 
 module.exports = QuestionController; 

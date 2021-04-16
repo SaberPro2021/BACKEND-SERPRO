@@ -12,6 +12,10 @@ router.get('/question', question.getAll);
 router.get('/question/:icfesModuleId', question.getByIcfesModul);
 router.get('/question/:icfesModuleId/:amount', question.getRandomByModule);
 router.post('/question', question.post);
+router.post('/questionUpdate/:questionId', question.updateQuestion);
+router.delete('/questionDelete', question.deleteQuestion)
+router.delete('/questionDelete/:questionId', question.deleteByIdQuestion)
+
 
 //MODULE
 router.get('/module', icfesModule.getAllModules);
