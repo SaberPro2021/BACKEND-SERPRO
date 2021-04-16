@@ -4,9 +4,7 @@ const express = require('express');
 const app = express();
 const router = require('./router');
 const helmet = require('helmet');
-
 require('./database/db.connection');
-
 
 //middlewears
 app.use(helmet());

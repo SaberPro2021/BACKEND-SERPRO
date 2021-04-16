@@ -4,7 +4,7 @@ const router = require('express').Router();
 const question = require('./Controller/question.controller');
 const icfesModule = require('./Controller/icfesModule.controller');
 const icfesTest = require('./Controller/icfesTest.controller');
-
+const auth = require('./model/AuthLdap');
 //ADDRESSING LIST
 
 //QUESTION 
@@ -17,6 +17,9 @@ router.post('/questionUpdate/:questionId', question.updateQuestion);
 router.delete('/questionDelete', question.deleteQuestion)
 router.delete('/questionDelete/:questionId', question.deleteByIdQuestion)
 
+//AUTENTHICATION
+
+router.get('/ldap',auth.t);
 
 //MODULE
 router.get('/module', icfesModule.getAllModules);
