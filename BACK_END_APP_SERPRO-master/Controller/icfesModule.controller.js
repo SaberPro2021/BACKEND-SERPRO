@@ -46,7 +46,7 @@ ModuloController.createModule = async function(req, res) {
                     message: 'error insertando modulo'
                 });
             }
-            res.json(res);
+            res.json(response);
         });
     } else {
         res.status(500).send({
