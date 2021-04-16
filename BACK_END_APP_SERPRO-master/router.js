@@ -9,6 +9,7 @@ const icfesTest = require('./Controller/icfesTest.controller');
 
 //QUESTION 
 router.get('/question', question.getAll);
+router.get('/question/:questionId', question.getQuestionById);
 router.get('/question/:icfesModuleId', question.getByIcfesModul);
 router.get('/question/:icfesModuleId/:amount', question.getRandomByModule);
 router.post('/question', question.post);

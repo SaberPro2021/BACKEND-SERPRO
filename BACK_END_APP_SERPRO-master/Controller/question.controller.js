@@ -21,6 +21,27 @@ QuestionController.getAll = async function(req, res) {
    }
 };
 
+
+
+//FIND AND RETURN BY YD QUESTIONS
+QuestionController.getQuestionById = async function(req, res) {
+    try{
+        const questionId = req.params.questionId;
+        const data = await Question.find({
+            _id: ObjectId(questionId)
+        });
+        res.send(data);
+ 
+    }catch (err) {
+         console.log(err);
+         res.status(500).send({
+             message: 'error ocurred making the query'
+         });
+    }
+ };
+
+ 
+
 //FIND AND RETURN ALL THE QUESTIONS OF A MODULE
 QuestionController.getByIcfesModul = async function(req, res) {
     const icfesModuleId = req.params.icfesModuleId;
@@ -108,7 +129,7 @@ QuestionController.getRandomByModule = async function(req, res) {
 QuestionController.deleteByIdQuestion = async function(req, res) {
     try {
         const QuestionId = req.params.QuestionId;
-        const data = await Question.remove({
+        const data = await Question.deleteMany({
             _id: ObjectId(QuestionId)
         });
         res.json(data);
