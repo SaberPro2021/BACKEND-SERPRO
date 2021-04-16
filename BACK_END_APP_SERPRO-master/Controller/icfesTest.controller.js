@@ -64,4 +64,68 @@ icfesTestController.getAllTestWhitQuestions = async function(req, res) {
 };
 
 
+// DELETE ALL ICFESTEST
+icfesTestController.deleteIcfesTest = async function(req, res) {
+    try {
+        const delIcfesTest = await IcfesTest.remove();
+        res.json(delIcfesTest);
+    } catch (err) { 
+        console.log(err);
+        res.status(500).send({
+            message: 'some error ocurred'
+        });
+    }
+}
+
+
+
+//DELETE ICFES_TEST BY ID
+
+icfesTestController.deleteByIdIcfesTest = async function(req, res) {
+    try {
+        const icfesTestId = req.params.icfesTestId;
+        const data = await IcfesTest.remove({
+            _id: ObjectId(icfesTestId)
+        });
+        res.json(data);
+    } catch (err) { 
+        console.log(err);
+        res.status(500).send({
+            message: 'some error ocurred'
+        });
+    }
+}
+
+
+
+
+//UPDATE ICFES_TEST
+
+icfesTestController.updateicfesTestId = async function(req, res) {
+    try {
+        const icfesTestId = req.params.icfesTestId;
+        const icfesTests = new icfesTestModel(req.body);
+        
+        var data = {
+            title : icfesTests.title,
+            description : icfesTests.description,
+        }
+
+        const upIcfesTest = await IcfesTest.findByIdAndUpdate(icfesTestId, data,  async (err, response) => {
+            if (err) {
+                res.status(500).send({
+                    message: 'error modificando icfesTest'
+                });
+            }
+        });
+        res.json(upIcfesTest);
+    } catch (err) { 
+        console.log(err);
+        res.status(500).send({
+            message: 'some error ocurred'
+        });
+    }
+}
+
+
 module.exports = icfesTestController;

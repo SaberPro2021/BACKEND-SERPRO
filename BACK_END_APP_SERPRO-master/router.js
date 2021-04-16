@@ -27,5 +27,10 @@ router.get('/icfesTest', icfesTest.getAllTestWhitQuestions);
 router.get('/icfesTest/:testId', icfesTest.getTestWhitQuestions);
 router.get('/icfesTest/moduleId/:moduleId', icfesTest.getTestByModule);
 router.post('/icfesTest', icfesTest.post);
+router.post('/icfesTestUpdate/:icfesTestId',icfesTest.updateicfesTestId);//UpdateIcfesTest
+router.delete('/icfesTestDelete',icfesTest.deleteIcfesTest);
+router.delete('/icfesTestDelete/:icfesTestId',icfesTest.deleteByIdIcfesTest);
+
+
 
 module.exports = router;
