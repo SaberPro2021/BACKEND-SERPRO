@@ -5,8 +5,8 @@ const question = require('./Controller/question.controller');
 const icfesModule = require('./Controller/icfesModule.controller');
 const icfesTest = require('./Controller/icfesTest.controller');
 const auth = require('./model/AuthLdap');
+const usuario = require('./Controller/user.controller') ;
 //ADDRESSING LIST
-
 //QUESTION 
 router.get('/question', question.getAll);
 router.get('/question/:questionId', question.getQuestionById);
@@ -19,7 +19,8 @@ router.delete('/questionDelete/:questionId', question.deleteByIdQuestion)
 
 //AUTENTHICATION
 
-router.get('/ldap',auth.t);
+//router.get('/ldap',auth.t);
+router.get('/login', usuario.authentication)
 
 //MODULE
 router.get('/module', icfesModule.getAllModules);
