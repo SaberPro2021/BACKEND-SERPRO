@@ -129,9 +129,12 @@ QuestionController.getRandomByModule = async function(req, res) {
 
 QuestionController.deleteByIdQuestion = async function(req, res) {
     try {
-        const QuestionId = req.params.QuestionId;
-        const data = await Question.deleteMany({
-            _id: ObjectId(QuestionId)
+        const questionId = req.params.questionId;
+
+        const data = await Question.remove({
+
+            _id: ObjectId(questionId)
+
         });
         res.json(data);
     } catch (err) { 
@@ -141,8 +144,6 @@ QuestionController.deleteByIdQuestion = async function(req, res) {
         });
     }
 }
-
-
 
 //UPDATE ICFES_TEST
 

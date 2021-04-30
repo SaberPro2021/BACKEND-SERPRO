@@ -4,7 +4,6 @@ const router = require('express').Router();
 const question = require('./Controller/question.controller');
 const icfesModule = require('./Controller/icfesModule.controller');
 const icfesTest = require('./Controller/icfesTest.controller');
-const auth = require('./model/AuthLdap');
 const usuario = require('./Controller/user.controller') ;
 //ADDRESSING LIST
 //QUESTION 
