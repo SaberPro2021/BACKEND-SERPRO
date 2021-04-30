@@ -5,4 +5,5 @@ const dbconfig = {
     PASSWORD: "6sXyfujsZ55c4GF",
     DB: "SaberPro"
 };
+
 module.exports = dbconfig;

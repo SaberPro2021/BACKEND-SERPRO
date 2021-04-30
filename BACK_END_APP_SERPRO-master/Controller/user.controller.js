@@ -1,7 +1,7 @@
 const ldap = require('ldapjs');
 const assert = require('assert');
 const Usuario = require('../model/usuario.model');
-const { encrypt, decrypt } = require('../model/crypto.model');
+const { encrypt, decrypt } = require('../services/crypto.model');
 
 const Ldapclient = {};
 

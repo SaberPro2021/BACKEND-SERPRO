@@ -2,6 +2,7 @@ require('../database/db.connection');
 const { ObjectId } = require('mongodb');
 const questionModel = require('../model/question.model');
 const Question = require('../model/question.model');
+const Clearcache = require('../services/cache');
 
 
 //CONTROLLER'S STATEMENT
@@ -10,7 +11,7 @@ const QuestionController = {};
 //FIND AND RETURN ALL QUESTIONS
 QuestionController.getAll = async function(req, res) {
    try{
-        const questions = await Question.find();
+        const questions = await Question.find().cache();
         res.json(questions);
 
    }catch (err) {
@@ -29,7 +30,7 @@ QuestionController.getQuestionById = async function(req, res) {
         const questionId = req.params.questionId;
         const data = await Question.find({
             _id: ObjectId(questionId)
-        });
+        }).cache(questionId);
         res.send(data);
  
     }catch (err) {
@@ -47,7 +48,7 @@ QuestionController.getByIcfesModul = async function(req, res) {
     const icfesModuleId = req.params.icfesModuleId;
 
     try{
-         const questions = await Question.find({"icfesModuleId":icfesModuleId});
+         const questions = await Question.find({"icfesModuleId":icfesModuleId}).cache(icfesModuleId);
          res.json(questions);
  
     }catch (err){
