@@ -2,6 +2,7 @@ require('../database/db.connection');
 const { ObjectId } = require('mongodb');
 const IcfesModule = require('../model/icfesModule.model');
 const icfesTestModel = require('../model/icfesTest.model');
+const questionModel = require('../model/question.model');
 
 //CONTROLLER'S STATEMENT
 const ModuloController = {}; 
@@ -92,7 +93,15 @@ ModuloController.deleteByIdModule = async function(req, res) {
         const data = await IcfesModule.remove({
             _id: ObjectId(moduleId)
         });
-        res.json(data);
+        const dataQuestion = await questionModel.remove({
+            icfesModuleId:ObjectId(moduleId)
+        });
+        const dataTest = await icfesTestModel.remove({
+            moduleId: ObjectId(moduleId)
+        });
+        res.json(data,dataQuestion, dataTest);
+   
+
     } catch (err) { 
         console.log(err);
         res.status(500).send({
