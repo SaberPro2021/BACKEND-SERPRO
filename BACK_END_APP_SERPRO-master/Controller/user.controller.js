@@ -1,6 +1,6 @@
 const ldap = require('ldapjs');
 const assert = require('assert');
-const Usuario = require('../model/usuario.model');
+const Usuario = require('../model/login.model');
 const { encrypt, decrypt } = require('../services/crypto.model');
 
 const Ldapclient = {};
@@ -8,6 +8,8 @@ const Ldapclient = {};
 
 const Estudiante = /OU=ESTUDIANTES/;
 const Docente = /OU=DOCENTES/;
+
+var outcome;
 
 function expregStatus(expreg, str) {
 
@@ -54,11 +56,11 @@ Ldapclient.authentication = async function (req, res) {
                             res.json(entry.object);
 
 
-                            var outcome = expregStatus(Estudiante, entry.object.dn);
+                            outcome = expregStatus(Estudiante, entry.object.dn);
                             if (outcome != null)
                                 console.log(outcome[0])
                             else {
-                                var outcome = expregStatus(Docente, entry.object.dn);
+                                outcome = expregStatus(Docente, entry.object.dn);
                                 if (outcome != null)
                                     console.log(outcome[0])
                                 else
@@ -81,6 +83,14 @@ Ldapclient.authentication = async function (req, res) {
         });
     }
 
+}
+
+Ldapclient.isAccessGranted = function(req, res, next){
+    console.log("Salida de outcome - >",outcome[0])
+    console.log("Salida de estudiante - >",Estudiante)
+
+    if("OU=ESTUDIANTES" != outcome[0]) return res.status(401).end()
+    next()
 }
 
 module.exports = Ldapclient;

@@ -7,7 +7,8 @@ const icfesTest = require('./Controller/icfesTest.controller');
 const usuario = require('./Controller/user.controller') ;
 //ADDRESSING LIST
 //QUESTION 
-router.get('/question', question.getAll);
+
+router.get('/question',usuario.isAccessGranted, question.getAll);
 router.get('/question/:questionId', question.getQuestionById);
 router.get('/question/:icfesModuleId', question.getByIcfesModul);
 router.get('/question/:icfesModuleId/:amount', question.getRandomByModule);
