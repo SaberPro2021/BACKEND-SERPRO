@@ -1,16 +1,13 @@
-class User{
-    
-    constructor(mail, password){
-        this.mail = mail;
-        this.password = password;
-    }
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-    getMail (){
-        return this.mail;
-    }
-    getPassword(){
-        return this.password;
-    }
-}
+//SCHEME OF THE PROFILE COLLECTION
+const profile = new Schema({
+    name: String,
+    lastname: String,
+    mail:String,
+    role:String,
+    avatar: String
+}, { autoCreate: true });
 
-module.exports = User;
+module.exports = mongoose.model('Profile', profile);

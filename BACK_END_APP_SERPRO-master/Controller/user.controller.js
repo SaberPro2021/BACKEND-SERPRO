@@ -21,8 +21,8 @@ Ldapclient.authentication = async function (req, res) {
     if (req.body) {
         const usuario = new Usuario(req.body.mail, req.body.password);
 
-        console.log("Mail   -->", usuario.getMail());
-        console.log("Password  -->", usuario.getPassword());
+        //console.log("Mail   -->", usuario.getMail());
+        //console.log("Password  -->", usuario.getPassword());
 
         const cliente = ldap.createClient({
             url: 'ldap://192.168.4.10',
@@ -37,9 +37,9 @@ Ldapclient.authentication = async function (req, res) {
         }
 
         const hash = encrypt(usuario.getPassword());
-        console.log(hash);
+        //console.log(hash);
         const text = decrypt(hash);
-        console.log(text);
+        //console.log(text);
  
         try {
             cliente.bind(usuario.getMail(), decrypt(hash), async function (err) {
@@ -82,14 +82,13 @@ Ldapclient.authentication = async function (req, res) {
             message: 'error, the body is empty'
         });
     }
-
 }
 
 Ldapclient.isAccessGranted = function(req, res, next){
     console.log("Salida de outcome - >",outcome[0])
     console.log("Salida de estudiante - >",Estudiante)
 
-    if("OU=ESTUDIANTES" != outcome[0]) return res.status(401).end()
+    if(Estudiante != "/"+outcome[0]+"/") return res.status(401).end()
     next()
 }
 
