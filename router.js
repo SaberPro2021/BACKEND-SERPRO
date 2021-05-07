@@ -8,14 +8,14 @@ const usuario = require('./Controller/user.controller') ;
 //ADDRESSING LIST
 //QUESTION 
 
-router.get('/question',usuario.isAccessGranted, question.getAll);
-router.get('/question/:questionId', question.getQuestionById);
-router.get('/question/:icfesModuleId', question.getByIcfesModul);
-router.get('/question/:icfesModuleId/:amount', question.getRandomByModule);
-router.post('/question', question.post);
-router.post('/questionUpdate/:questionId', question.updateQuestion);
-router.delete('/questionDelete', question.deleteQuestion)
-router.delete('/questionDelete/:questionId', question.deleteByIdQuestion)
+router.get('/question',usuario.isAccessGrantedLogin, question.getAll);
+router.get('/question/:questionId',usuario.isAccessGrantedLogin, question.getQuestionById);
+router.get('/question/:icfesModuleId',usuario.isAccessGrantedLogin, question.getByIcfesModul);
+router.get('/question/:icfesModuleId/:amount', usuario.isAccessGrantedLogin,question.getRandomByModule);
+router.post('/question', usuario.isAccessGrantedDocente,question.post);
+router.post('/questionUpdate/:questionId',usuario.isAccessGrantedDocente, question.updateQuestion);
+router.delete('/questionDelete',usuario.isAccessGrantedDocente, question.deleteQuestion)
+router.delete('/questionDelete/:questionId', usuario.isAccessGrantedDocente,question.deleteByIdQuestion)
 
 //AUTENTHICATION
 
@@ -23,22 +23,22 @@ router.delete('/questionDelete/:questionId', question.deleteByIdQuestion)
 router.get('/login', usuario.authentication)
 
 //MODULE
-router.get('/module', icfesModule.getAllModules);
-router.get('/moduleWithTests', icfesModule.getModulesWithTests);
-router.post('/module', icfesModule.createModule);
-router.post('/moduleAll', icfesModule.saveAllModule);
-router.post('/moduleUpdate/:moduleId',icfesModule.updateModule);
-router.delete('/moduleDelete',icfesModule.deleteModules);
-router.delete('/moduleDelete/:moduleId',icfesModule.deleteByIdModule);
+router.get('/module',usuario.isAccessGrantedLogin, icfesModule.getAllModules);
+router.get('/moduleWithTests',usuario.isAccessGrantedLogin, icfesModule.getModulesWithTests);
+router.post('/module', usuario.isAccessGrantedDocente, icfesModule.createModule);
+router.post('/moduleAll',usuario.isAccessGrantedDocente, icfesModule.saveAllModule);
+router.post('/moduleUpdate/:moduleId',usuario.isAccessGrantedDocente,icfesModule.updateModule);
+router.delete('/moduleDelete',usuario.isAccessGrantedDocente,icfesModule.deleteModules);
+router.delete('/moduleDelete/:moduleId',usuario.isAccessGrantedDocente,icfesModule.deleteByIdModule);
 
 //ICFES TEST
-router.get('/icfesTest', icfesTest.getAllTestWhitQuestions);
-router.get('/icfesTest/:testId', icfesTest.getTestWhitQuestions);
-router.get('/icfesTest/moduleId/:moduleId', icfesTest.getTestByModule);
-router.post('/icfesTest', icfesTest.post);
-router.post('/icfesTestUpdate/:icfesTestId',icfesTest.updateicfesTestId);//UpdateIcfesTest
-router.delete('/icfesTestDelete',icfesTest.deleteIcfesTest);
-router.delete('/icfesTestDelete/:icfesTestId',icfesTest.deleteByIdIcfesTest);
+router.get('/icfesTest',usuario.isAccessGrantedLogin, icfesTest.getAllTestWhitQuestions);
+router.get('/icfesTest/:testId',usuario.isAccessGrantedLogin, icfesTest.getTestWhitQuestions);
+router.get('/icfesTest/moduleId/:moduleId', usuario.isAccessGrantedLogin,icfesTest.getTestByModule);
+router.post('/icfesTest',usuario.isAccessGrantedDocente, icfesTest.post);
+router.post('/icfesTestUpdate/:icfesTestId',usuario.isAccessGrantedDocente,icfesTest.updateicfesTestId);//UpdateIcfesTest
+router.delete('/icfesTestDelete',usuario.isAccessGrantedDocente,icfesTest.deleteIcfesTest);
+router.delete('/icfesTestDelete/:icfesTestId',usuario.isAccessGrantedDocente,icfesTest.deleteByIdIcfesTest);
 
 
 

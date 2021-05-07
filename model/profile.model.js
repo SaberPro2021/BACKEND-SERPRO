@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { Schema } = mongoose;
+const {Schema} = mongoose;
 
 //SCHEME OF THE PROFILE COLLECTION
 const profile = new Schema({
@@ -11,3 +11,7 @@ const profile = new Schema({
 }, { autoCreate: true });
 
 module.exports = mongoose.model('Profile', profile);
+
+
+
+

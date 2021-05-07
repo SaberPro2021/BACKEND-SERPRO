@@ -5,7 +5,6 @@ const { encrypt, decrypt } = require('../services/crypto.model');
 
 const Ldapclient = {};
 
-
 const Estudiante = /OU=ESTUDIANTES/;
 const Docente = /OU=DOCENTES/;
 
@@ -84,12 +83,18 @@ Ldapclient.authentication = async function (req, res) {
     }
 }
 
-Ldapclient.isAccessGranted = function(req, res, next){
+Ldapclient.isAccessGrantedDocente = function(req, res, next){
     console.log("Salida de outcome - >",outcome[0])
     console.log("Salida de estudiante - >",Estudiante)
 
-    if(Estudiante != "/"+outcome[0]+"/") return res.status(401).end()
+    if(Docente != "/"+outcome[0]+"/") return res.status(401).end()
     next()
 }
+
+Ldapclient.isAccessGrantedLogin = function(req, res, next){
+     if(Docente != "/"+outcome[0]+"/" && Estudiante != "/"+outcome[0]+"/" ) return res.status(401).end()
+    next()
+}
+
 
 module.exports = Ldapclient;
