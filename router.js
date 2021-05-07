@@ -4,7 +4,7 @@ const router = require('express').Router();
 const question = require('./Controller/question.controller');
 const icfesModule = require('./Controller/icfesModule.controller');
 const icfesTest = require('./Controller/icfesTest.controller');
-const usuario = require('./Controller/user.controller') ;
+const usuario = require('./services/user.service') ;
 //ADDRESSING LIST
 //QUESTION 
 

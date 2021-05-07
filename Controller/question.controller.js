@@ -2,7 +2,7 @@ require('../database/db.connection');
 const { ObjectId } = require('mongodb');
 const questionModel = require('../model/question.model');
 const Question = require('../model/question.model');
-const Clearcache = require('../services/cache');
+const Clearcache = require('../services/cache.service');
 
 
 //CONTROLLER'S STATEMENT

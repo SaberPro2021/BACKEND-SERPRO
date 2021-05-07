@@ -1,7 +1,9 @@
 const ldap = require('ldapjs');
 const assert = require('assert');
-const Usuario = require('../model/login.model');
-const { encrypt, decrypt } = require('../services/crypto.model');
+const Usuario = require('../model/loginClass.model');
+const Profile = require('../model/profile.model')
+const { encrypt, decrypt } = require('./crypto.service');
+const ProfileClass = require('../model/profileClass.model');
 
 const Ldapclient = {};
 
@@ -55,6 +57,7 @@ Ldapclient.authentication = async function (req, res) {
                             res.json(entry.object);
 
 
+
                             outcome = expregStatus(Estudiante, entry.object.dn);
                             if (outcome != null)
                                 console.log(outcome[0])
@@ -66,6 +69,14 @@ Ldapclient.authentication = async function (req, res) {
                                     console.log('NULL')
 
                             }
+                            
+                            //console.log(entry.object.givenName, entry.object.sn, entry.object.mail, outcome[0]);
+
+                            const profileClass = new ProfileClass(entry.object.givenName, entry.object.sn, entry.object.mail, outcome[0], null)
+
+                            console.log("Temportal -- >  ",profileClass);
+                            const profile = new Profile(profileClass);
+                            console.log("Profile --> ",profile);
 
                         });
                     });

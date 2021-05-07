@@ -4,7 +4,7 @@ const uriRedis = require('../database/db.connection');
 const IcfesModule = require('../model/icfesModule.model');
 const icfesTestModel = require('../model/icfesTest.model');
 const questionModel = require('../model/question.model');
-const clearCache = require('../services/cache');
+const clearCache = require('../services/cache.service');
 
 
 //CONTROLLER'S STATEMENT
