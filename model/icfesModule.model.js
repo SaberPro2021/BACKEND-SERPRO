@@ -9,8 +9,6 @@ const icfesModuleSchema = new Schema ({
     type: String,
     description: String,
     evaluate: String
-
-
 },{autoCreate: true});
 
 

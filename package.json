@@ -20,11 +20,15 @@
         "cors": "^2.8.5",
         "dotenv": "^8.2.0",
         "express": "^4.17.1",
+        "gm": "^1.23.1",
         "helmet": "^4.1.1",
         "ldapjs": "^2.2.4",
         "mongodb": "^3.6.1",
         "mongoose": "^5.10.5",
         "multer": "^1.4.2",
         "redis": "^3.1.2"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.7"
     }
 }

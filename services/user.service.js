@@ -4,9 +4,13 @@ const Usuario = require('../model/loginClass.model');
 const Profile = require('../model/profile.model')
 const { encrypt, decrypt } = require('./crypto.service');
 const ProfileClass = require('../model/profileClass.model');
+const profileController = require('../Controller/profile.controller')
+const multer = require('multer');
+
+const upload = (multer({
+ }).single('image'))
 
 const Ldapclient = {};
-
 const Estudiante = /OU=ESTUDIANTES/;
 const Docente = /OU=DOCENTES/;
 
@@ -60,7 +64,7 @@ Ldapclient.authentication = async function (req, res) {
 
                             outcome = expregStatus(Estudiante, entry.object.dn);
                             if (outcome != null)
-                                console.log(outcome[0])
+                                console.log("Outcome -> ",outcome[0])
                             else {
                                 outcome = expregStatus(Docente, entry.object.dn);
                                 if (outcome != null)
@@ -68,15 +72,9 @@ Ldapclient.authentication = async function (req, res) {
                                 else
                                     console.log('NULL')
 
-                            }
+                            }   
                             
-                            //console.log(entry.object.givenName, entry.object.sn, entry.object.mail, outcome[0]);
-
-                            const profileClass = new ProfileClass(entry.object.givenName, entry.object.sn, entry.object.mail, outcome[0], null)
-
-                            console.log("Temportal -- >  ",profileClass);
-                            const profile = new Profile(profileClass);
-                            console.log("Profile --> ",profile);
+                          Ldapclient.profileUser(err, entry, outcome);
 
                         });
                     });
@@ -107,5 +105,14 @@ Ldapclient.isAccessGrantedLogin = function(req, res, next){
     next()
 }
 
+Ldapclient.profileUser = function(err, entry, outcome) {
+
+    profileClass = new ProfileClass(entry.object.givenName, entry.object.sn, entry.object.mail, outcome[0],"upload(imageDefault)")
+    
+    const profileMongo = new Profile(profileClass);
+    //console.log("Profile -- > ",profileMongo);
+    profileController.createProfile(err, profileMongo);
+    return profileMongo;
+};
 
 module.exports = Ldapclient;
