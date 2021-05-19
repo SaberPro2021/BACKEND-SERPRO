@@ -4,7 +4,7 @@ const uriRedis = require('../database/db.connection');
 const IcfesModule = require('../model/icfesModule.model');
 const icfesTestModel = require('../model/icfesTest.model');
 const questionModel = require('../model/question.model');
-const clearCache = require('../services/cleanCache.service')
+const clearCache = require('../services/cache.service')
 
 //CONTROLLER'S STATEMENT
 const ModuloController = {}; 
@@ -12,11 +12,9 @@ const ModuloController = {};
 //RETURN ALL MODULES
 ModuloController.getAllModules = async function(req, res) {
     try {
-        clearCache
-        console.log("¿Estás Entrando Acá? -->",clearCache.)
+        clearCache("")
         const data = await IcfesModule.find().cache();
         res.json(data);
-    
     } catch (err) {
         console.log(err);
         res.status(500).send({

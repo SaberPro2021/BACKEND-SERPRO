@@ -7,13 +7,13 @@ const dbconfig = require('../database/db.connection')
 
 const redisUrl = dbconfig.URL;
 const client = redis.createClient(redisUrl);
-client.hget = util.promisify(client.hget);                // client get does not support promises. this is a way to promisify them
+// client get does not support promises. this is a way to promisify them
+client.hget = util.promisify(client.hget);                
 
 mongoose.Query.prototype.cache = function(hkey){
 
     this.useCache = true;
 
-    // this is the top level key like motercycles or cars or trucks etc
     this.hashkey = JSON.stringify(hkey || '')
 
     return this;
@@ -69,6 +69,9 @@ mongoose.Query.prototype.exec = async function(){ // Modifing the exec property 
         else{
             // data is there (non-empty array or an single object)
             client.hset(this.hashkey, key, JSON.stringify(result)); // saving data in redis cache
+
+
+
             return result
         }
     }else{ // database returned null value
@@ -78,8 +81,7 @@ mongoose.Query.prototype.exec = async function(){ // Modifing the exec property 
 }
 
 
-module.exports = {
-     clearCache(hashkey){
+module.exports = 
+     function clearCache(hashkey){
         client.del(JSON.stringify(hashkey));
     }
-}
