@@ -2,6 +2,7 @@ require('../database/db.connection');
 const { ObjectId } = require('mongodb');
 const questionModel = require('../model/question.model');
 const Question = require('../model/question.model');
+const clearCache = require('../services/cache.service')
 
 
 //CONTROLLER'S STATEMENT
@@ -61,6 +62,8 @@ QuestionController.getByIcfesModul = async function(req, res) {
 //CREATE A NEW QUESTION
 QuestionController.post = async function(req,res){
     if(req.body){
+        clearCache("")
+
         const question = new Question(req.body);
       
         question.save((err,savedDoc)=>{
@@ -113,6 +116,8 @@ QuestionController.getRandomByModule = async function(req, res) {
  // DELETE ALL QUESTIONS
  QuestionController.deleteQuestion = async function(req, res) {
     try {
+        clearCache("")
+
         const delQuestion = await Question.remove();
         res.json(delQuestion);
     } catch (err) { 
@@ -129,6 +134,8 @@ QuestionController.getRandomByModule = async function(req, res) {
 
 QuestionController.deleteByIdQuestion = async function(req, res) {
     try {
+        clearCache("")
+
         const questionId = req.params.questionId;
 
         const data = await Question.remove({
@@ -149,6 +156,8 @@ QuestionController.deleteByIdQuestion = async function(req, res) {
 
 QuestionController.updateQuestion = async function(req, res) {
     try {
+        clearCache("")
+
         const questionId = req.params.questionId;
         const Questions = new questionModel(req.body);
         

@@ -3,6 +3,8 @@ const { ObjectId } = require('mongodb');
 const icfesTestModel = require('../model/icfesTest.model');
 const IcfesTest = require('../model/icfesTest.model');
 const Question = require('../model/question.model');
+const clearCache = require('../services/cache.service')
+
 
 const icfesTestController = {};
 
@@ -26,6 +28,7 @@ icfesTestController.getTestByModule = async function(req, res) {
 icfesTestController.post = async function(req, res) {
 
     if (req.body) {
+        clearCache("")
         const icfesTestController = new IcfesTest(req.body);
         icfesTestController.save((err, response) => {
             if (err) {
@@ -67,6 +70,7 @@ icfesTestController.getAllTestWhitQuestions = async function(req, res) {
 // DELETE ALL ICFESTEST
 icfesTestController.deleteIcfesTest = async function(req, res) {
     try {
+        clearCache("")
         const delIcfesTest = await IcfesTest.remove();
         res.json(delIcfesTest);
     } catch (err) { 
@@ -83,6 +87,8 @@ icfesTestController.deleteIcfesTest = async function(req, res) {
 
 icfesTestController.deleteByIdIcfesTest = async function(req, res) {
     try {
+        clearCache("")
+
         const icfesTestId = req.params.icfesTestId;
         const data = await IcfesTest.remove({
             _id: ObjectId(icfesTestId)
@@ -103,6 +109,8 @@ icfesTestController.deleteByIdIcfesTest = async function(req, res) {
 
 icfesTestController.updateicfesTestId = async function(req, res) {
     try {
+        clearCache("")
+
         const icfesTestId = req.params.icfesTestId;
         const icfesTests = new icfesTestModel(req.body);
         

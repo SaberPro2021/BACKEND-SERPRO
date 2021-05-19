@@ -12,7 +12,6 @@ const ModuloController = {};
 //RETURN ALL MODULES
 ModuloController.getAllModules = async function(req, res) {
     try {
-        clearCache("")
         const data = await IcfesModule.find().cache();
         res.json(data);
     } catch (err) {
@@ -43,6 +42,7 @@ ModuloController.getModulesWithTests = async function(req, res) {
 //CREATE A NEW MODULE
 ModuloController.createModule = async function(req, res) {
     if (req.body) {
+        clearCache("")
         const icfesModules = new IcfesModule(req.body);
         icfesModules.save((err, response) => {
             if (err) {
@@ -79,6 +79,7 @@ ModuloController.saveAllModule = async function(req, res) {
 //DELETE MODULE
 ModuloController.deleteModules = async function(req, res) {
     try {
+        clearCache("")
         const delModul = await IcfesModule.remove();
         res.json(delModul);
     } catch (err) { 
@@ -92,6 +93,7 @@ ModuloController.deleteModules = async function(req, res) {
 //DELETE MODULE BY ID
 ModuloController.deleteByIdModule = async function(req, res) {
     try {
+        clearCache("")
         const moduleId = req.params.moduleId;
         const data = await IcfesModule.remove({
             _id: ObjectId(moduleId)
@@ -116,6 +118,7 @@ ModuloController.deleteByIdModule = async function(req, res) {
 //UPDATE MODULE
 ModuloController.updateModule = async function(req, res) {
     try {
+        clearCache("")
         const moduleId = req.params.moduleId;
         const icfesModules = new IcfesModule(req.body);
         
