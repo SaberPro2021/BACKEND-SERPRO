@@ -78,7 +78,8 @@ mongoose.Query.prototype.exec = async function(){ // Modifing the exec property 
 }
 
 
-module.exports = 
-    function clearCache(hashkey){
-        client.del(JSON.stringify(hashkey))
+module.exports = {
+     clearCache(hashkey){
+        client.del(JSON.stringify(hashkey));
     }
+}
