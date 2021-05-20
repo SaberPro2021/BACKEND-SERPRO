@@ -5,10 +5,6 @@ const Profile = require('../model/profile.model')
 const { encrypt, decrypt } = require('./crypto.service');
 const ProfileClass = require('../model/profileClass.model');
 const profileController = require('../Controller/profile.controller')
-const multer = require('multer');
-
-const upload = (multer({
- }).single('image'))
 
 const Ldapclient = {};
 const Estudiante = /OU=ESTUDIANTES/;
@@ -107,7 +103,7 @@ Ldapclient.isAccessGrantedLogin = function(req, res, next){
 
 Ldapclient.profileUser = function(err, entry, outcome) {
 
-    profileClass = new ProfileClass(entry.object.givenName, entry.object.sn, entry.object.mail, outcome[0],"upload(imageDefault)")
+    profileClass = new ProfileClass(entry.object.givenName, entry.object.sn, entry.object.mail, outcome[0],"")
     
     const profileMongo = new Profile(profileClass);
     //console.log("Profile -- > ",profileMongo);
