@@ -5,13 +5,13 @@ const Question = require('../model/question.model');
 const clearCache = require('../services/cache.service')
 
 
-//CONTROLLER'S STATEMENT
+//CONTROLLER'S STATEMENT 
 const QuestionController = {};
 
-//FIND AND RETURN ALL QUESTIONS
+//FIND AND RETURN ALL QUESTIONS METHOD GET
 QuestionController.getAll = async function(req, res) {
    try{
-        const questions = await Question.find().cache();
+        const questions = await Question.find().cache("Question");
         res.json(questions);
 
    }catch (err) {
@@ -62,7 +62,7 @@ QuestionController.getByIcfesModul = async function(req, res) {
 //CREATE A NEW QUESTION
 QuestionController.post = async function(req,res){
     if(req.body){
-        clearCache("")
+        clearCache("Question")
 
         const question = new Question(req.body);
       
@@ -116,7 +116,7 @@ QuestionController.getRandomByModule = async function(req, res) {
  // DELETE ALL QUESTIONS
  QuestionController.deleteQuestion = async function(req, res) {
     try {
-        clearCache("")
+        clearCache("Question")
 
         const delQuestion = await Question.remove();
         res.json(delQuestion);
@@ -134,7 +134,7 @@ QuestionController.getRandomByModule = async function(req, res) {
 
 QuestionController.deleteByIdQuestion = async function(req, res) {
     try {
-        clearCache("")
+        clearCache("Question")
 
         const questionId = req.params.questionId;
 
@@ -156,7 +156,7 @@ QuestionController.deleteByIdQuestion = async function(req, res) {
 
 QuestionController.updateQuestion = async function(req, res) {
     try {
-        clearCache("")
+        clearCache("Question")
 
         const questionId = req.params.questionId;
         const Questions = new questionModel(req.body);

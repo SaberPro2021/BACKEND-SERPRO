@@ -5,6 +5,7 @@ const question = require('./Controller/question.controller');
 const icfesModule = require('./Controller/icfesModule.controller');
 const icfesTest = require('./Controller/icfesTest.controller');
 const usuario = require('./services/user.service') ;
+const profile = require('./Controller/profile.controller');
 
 
 //ADDRESSING LIST
@@ -41,6 +42,12 @@ router.post('/icfesTest',usuario.isAccessGrantedDocente, icfesTest.post);
 router.post('/icfesTestUpdate/:icfesTestId',usuario.isAccessGrantedDocente,icfesTest.updateicfesTestId);//UpdateIcfesTest
 router.delete('/icfesTestDelete',usuario.isAccessGrantedDocente,icfesTest.deleteIcfesTest);
 router.delete('/icfesTestDelete/:icfesTestId',usuario.isAccessGrantedDocente,icfesTest.deleteByIdIcfesTest);
+
+/* PROFILE USER */
+
+router.get('/users', usuario.isAccessGrantedDocente, profile.getAllUsers )
+router.get('/users/:userId', usuario.isAccessGrantedDocente, profile.getUsersById)
+router.post('/userUpdate', usuario.isAccessGrantedDocente, profile.userUpdateImage)
 
 
 

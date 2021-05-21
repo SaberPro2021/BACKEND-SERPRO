@@ -16,7 +16,7 @@ ModuloController.getAllModules = async function(req, res) {
         req.session.cuenta = req.session.cuenta ? req.session.cuenta + 1 : 1 
         console.log("ESTADO SESSION EN GET >"+req.session.cuenta +' '+ req.session.user)
 
-        const data = await IcfesModule.find().cache();
+        const data = await IcfesModule.find().cache("Modules");
         res.json(data);
     } catch (err) {
         console.log(err);
@@ -46,7 +46,7 @@ ModuloController.getModulesWithTests = async function(req, res) {
 //CREATE A NEW MODULE
 ModuloController.createModule = async function(req, res) {
     if (req.body) {
-        clearCache("")
+        clearCache("Modules")
         const icfesModules = new IcfesModule(req.body);
         icfesModules.save((err, response) => {
             if (err) {
@@ -83,7 +83,7 @@ ModuloController.saveAllModule = async function(req, res) {
 //DELETE MODULE
 ModuloController.deleteModules = async function(req, res) {
     try {
-        clearCache("")
+        clearCache("Modules")
         const delModul = await IcfesModule.remove();
         res.json(delModul);
     } catch (err) { 
@@ -97,7 +97,7 @@ ModuloController.deleteModules = async function(req, res) {
 //DELETE MODULE BY ID
 ModuloController.deleteByIdModule = async function(req, res) {
     try {
-        clearCache("")
+        clearCache("Modules")
         const moduleId = req.params.moduleId;
         const data = await IcfesModule.remove({
             _id: ObjectId(moduleId)
@@ -122,7 +122,7 @@ ModuloController.deleteByIdModule = async function(req, res) {
 //UPDATE MODULE
 ModuloController.updateModule = async function(req, res) {
     try {
-        clearCache("")
+        clearCache("Modules")
         const moduleId = req.params.moduleId;
         const icfesModules = new IcfesModule(req.body);
         

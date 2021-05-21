@@ -14,7 +14,7 @@ icfesTestController.getTestByModule = async function(req, res) {
         const moduleId = req.params.moduleId;
         const data = await icfesTestModel.find({
            moduleId: ObjectId(moduleId)
-        }).cache(moduleId);
+        }).cache(moduleId)
         res.send(data);
     } catch (err) {
         console.log(err);
