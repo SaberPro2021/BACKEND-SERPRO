@@ -12,6 +12,10 @@ const ModuloController = {};
 //RETURN ALL MODULES
 ModuloController.getAllModules = async function(req, res) {
     try {
+    
+        req.session.cuenta = req.session.cuenta ? req.session.cuenta + 1 : 1 
+        console.log("ESTADO SESSION EN GET >"+req.session.cuenta +' '+ req.session.user)
+
         const data = await IcfesModule.find().cache();
         res.json(data);
     } catch (err) {

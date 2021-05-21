@@ -13,7 +13,7 @@ const upload = (multer({
 const Ldapclient = {};
 const Estudiante = /OU=ESTUDIANTES/;
 const Docente = /OU=DOCENTES/;
-
+var userMail = '';
 var outcome;
 
 function expregStatus(expreg, str) {
@@ -25,7 +25,7 @@ Ldapclient.authentication = async function (req, res) {
 
     if (req.body) {
         const usuario = new Usuario(req.body.mail, req.body.password);
-
+        userMail = req.body.mail;
         //console.log("Mail   -->", usuario.getMail());
         //console.log("Password  -->", usuario.getPassword());
 
@@ -60,8 +60,6 @@ Ldapclient.authentication = async function (req, res) {
 
                             res.json(entry.object);
 
-
-
                             outcome = expregStatus(Estudiante, entry.object.dn);
                             if (outcome != null)
                                 console.log("Outcome -> ",outcome[0])
@@ -73,10 +71,13 @@ Ldapclient.authentication = async function (req, res) {
                                     console.log('NULL')
 
                             }   
-                            
-                          Ldapclient.profileUser(err, entry, outcome);
-
+                        
+                        Ldapclient.profileUser(err, entry, outcome);
                         });
+
+                        //session with user name
+                        req.session.user = usuario.getMail()
+
                     });
 
                 }
@@ -95,13 +96,22 @@ Ldapclient.authentication = async function (req, res) {
 Ldapclient.isAccessGrantedDocente = function(req, res, next){
     console.log("Salida de outcome - >",outcome[0])
     console.log("Salida de estudiante - >",Estudiante)
+    console.log("isAccessGrantedDocente - PERMISO USUARIO DE LA SESION >"+req.session.user + " " + userMail)
+    if (req.session.user!=userMail) 
+        return res.status(401).end()
 
     if(Docente != "/"+outcome[0]+"/") return res.status(401).end()
     next()
 }
 
 Ldapclient.isAccessGrantedLogin = function(req, res, next){
-     if(Docente != "/"+outcome[0]+"/" && Estudiante != "/"+outcome[0]+"/" ) return res.status(401).end()
+    //Se requiere validar con la sesion también
+    console.log("isAccessGrantedLogin - PERMISO USUARIO DE LA SESION >"+req.session.user + " " + userMail)
+    if (req.session.user!=userMail) 
+        return res.status(401).end()
+
+    if(Docente != "/"+outcome[0]+"/" && Estudiante != "/"+outcome[0]+"/" ) 
+        return res.status(401).end()
     next()
 }
 
