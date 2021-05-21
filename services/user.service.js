@@ -30,10 +30,10 @@ function expregStatus(expreg, str) {
 Ldapclient.authentication = async function (req, res) {
 
     if (req.body) {
-        const usuario = new Usuario(req.body.mail, req.body.password);
-        userMail = req.body.mail;
-        //console.log("Mail   -->", usuario.getMail());
-        //console.log("Password  -->", usuario.getPassword());
+        const usuario = new Usuario(req.body.email, req.body.password);
+        userMail = req.body.email;
+        console.log("Mail   -->", usuario.getMail());
+        console.log("Password  -->", usuario.getPassword());
 
         const cliente = ldap.createClient({
             url: 'ldap://192.168.4.10',
@@ -51,7 +51,7 @@ Ldapclient.authentication = async function (req, res) {
         //console.log(hash);
         const text = decrypt(hash);
         //console.log(text);
- 
+
         try {
             cliente.bind(usuario.getMail(), decrypt(hash), async function (err) {
                 if (err) {
@@ -68,7 +68,7 @@ Ldapclient.authentication = async function (req, res) {
 
                             outcome = expregStatus(Estudiante, entry.object.dn);
                             if (outcome != null)
-                                console.log("Outcome -> ",outcome[0])
+                                console.log("Outcome -> ", outcome[0])
                             else {
                                 outcome = expregStatus(Docente, entry.object.dn);
                                 if (outcome != null)
@@ -76,9 +76,9 @@ Ldapclient.authentication = async function (req, res) {
                                 else
                                     console.log('NULL')
 
-                            }   
-                        
-                        Ldapclient.profileUser(err, entry, outcome);
+                            }
+
+                            Ldapclient.profileUser(err, entry, outcome);
                         });
 
                         //session with user name
@@ -99,36 +99,45 @@ Ldapclient.authentication = async function (req, res) {
     }
 }
 
-Ldapclient.isAccessGrantedDocente = function(req, res, next){
-    console.log("Salida de outcome ->",outcome[0])
-    console.log("Salida de estudiante ->",Estudiante)
-    console.log("isAccessGrantedDocente - GRANT USUARIO DE LA SESION->"+req.session.user + " " + userMail)
-    if (req.session.user!=userMail) 
-        return res.status(401).end() 
+Ldapclient.isAccessGrantedDocente = function (req, res, next) {
+    console.log("Salida de outcome ->", outcome[0])
+    console.log("isAccessGrantedDocente - GRANT USUARIO DE LA SESION->" + req.session.user + " " + userMail)
+    //if (req.session.user != userMail)
+      //  return res.status(401).end()
 
-    if(Docente != "/"+outcome[0]+"/") return res.status(401).end()
+    if (Docente != "/" + outcome[0] + "/") return res.status(401).end()
     next()
 }
 
-Ldapclient.isAccessGrantedLogin = function(req, res, next){
+Ldapclient.isAccessGrantedLogin = function (req, res, next) {
     //Se requiere validar con la sesion también
-    console.log("isAccessGrantedLogin - GRANT USUARIO DE LA SESION >"+req.session.user + " " + userMail)
-    if (req.session.user!=userMail) 
-        return res.status(401).end()
+    console.log("isAccessGrantedLogin - GRANT USUARIO DE LA SESION >" + req.session.user + " " + userMail)
+    console.log(req.session);
+   // if (req.session.user != userMail)
+     //   return res.status(401).end()
 
-    if(Docente != "/"+outcome[0]+"/" && Estudiante != "/"+outcome[0]+"/" ) 
+     console.log("outcome --> " ,outcome[0])
+
+    if (Docente != "/" + outcome[0] + "/" && Estudiante != "/" + outcome[0] + "/")
         return res.status(401).end()
     next()
 }
 
-Ldapclient.profileUser = function(err, entry, outcome) {
+Ldapclient.profileUser = function (err, entry, outcome) {
 
-    profileClass = new ProfileClass(entry.object.givenName, entry.object.sn, entry.object.mail, outcome[0],imageAsBase64)
-    
+    profileClass = new ProfileClass(entry.object.givenName, entry.object.sn, entry.object.mail, outcome[0], imageAsBase64)
+
     const profileMongo = new Profile(profileClass);
     //console.log("Profile -- > ",profileMongo);
     profileController.createProfile(err, profileMongo);
     return profileMongo;
 };
+
+Ldapclient.destroySession = async function (req, res) {
+    console.log("session -- > ", req.session)
+    req.session.destroy(() => {
+        res.redirect('/') // will always fire after session is destroyed
+    })
+}
 
 module.exports = Ldapclient;

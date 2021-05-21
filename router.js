@@ -23,7 +23,8 @@ router.delete('/questionDelete/:questionId', usuario.isAccessGrantedDocente,ques
 //AUTENTHICATION
 
 //router.get('/ldap',auth.t);
-router.get('/login', usuario.authentication)
+router.post('/login', usuario.authentication)
+router.get('/logout', usuario.destroySession)
 
 //MODULE
 router.get('/module',usuario.isAccessGrantedLogin, icfesModule.getAllModules);
