@@ -12,6 +12,16 @@ const Docente = /OU=DOCENTES/;
 
 var outcome;
 
+var fs = require('fs');
+
+var imageAsBase64 = fs.readFileSync('./image/profile.png', 'base64');
+const buffer = Buffer.from(imageAsBase64, "base64");
+//console.log(imageAsBase64 , "  --->>   ",buffer)
+
+
+fs.writeFileSync("C:\\Users\\jubernal11\\OneDrive - Politécnico Grancolombiano\\Escritorio\\image\\x.png", buffer);
+
+
 function expregStatus(expreg, str) {
 
     return expreg.exec(str);
@@ -103,7 +113,7 @@ Ldapclient.isAccessGrantedLogin = function(req, res, next){
 
 Ldapclient.profileUser = function(err, entry, outcome) {
 
-    profileClass = new ProfileClass(entry.object.givenName, entry.object.sn, entry.object.mail, outcome[0],"")
+    profileClass = new ProfileClass(entry.object.givenName, entry.object.sn, entry.object.mail, outcome[0],imageAsBase64)
     
     const profileMongo = new Profile(profileClass);
     //console.log("Profile -- > ",profileMongo);
