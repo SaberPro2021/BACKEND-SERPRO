@@ -48,7 +48,7 @@ router.delete('/icfesTestDelete/:icfesTestId',usuario.isAccessGrantedDocente,icf
 
 router.get('/users', usuario.isAccessGrantedDocente, profile.getAllUsers )
 router.get('/users/:userId', usuario.isAccessGrantedDocente, profile.getUsersById)
-router.post('/userUpdate', usuario.isAccessGrantedDocente, profile.userUpdateImage)
+router.post('/userUpdate/:userId', usuario.isAccessGrantedDocente, profile.userUpdateImage)
 
 
 

@@ -32,8 +32,8 @@ Ldapclient.authentication = async function (req, res) {
     if (req.body) {
         const usuario = new Usuario(req.body.email, req.body.password);
         userMail = req.body.email;
-        console.log("Mail   -->", usuario.getMail());
-        console.log("Password  -->", usuario.getPassword());
+        //console.log("Mail   -->", usuario.getMail());
+        //console.log("Password  -->", usuario.getPassword());
 
         const cliente = ldap.createClient({
             url: 'ldap://192.168.4.10',
