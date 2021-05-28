@@ -25,7 +25,7 @@ Profiles.createProfile = async function (err, profile) {
 
 Profiles.getAllUsers = async function(req, res) {
     try {
-        const data = await profileModel.find().cache("Profiles");
+        const data = await profileModel.find().cache();
         res.json(data);
     } catch (err) {
         console.log(err);
@@ -37,6 +37,7 @@ Profiles.getAllUsers = async function(req, res) {
 Profiles.getUsersById = async function(req, res) {
     try{
         const userID = req.params.userId;
+        console.log(userID)
         const data = await profileModel.find({
             _id: ObjectId(userID)
         }).cache(userID);
@@ -52,17 +53,20 @@ Profiles.getUsersById = async function(req, res) {
 
 Profiles.userUpdateImage = async function(req, res) {
     try {
-
         const userID = req.params.userId;
         const User = new profileModel(req.body);
-        
+    
         var data = {
             avatar : User.avatar
         }
+        
+        var fs = require('fs');
 
-        console.log(data)
+        var imageAsBase64 = fs.readFileSync(data.avatar, 'base64');
 
-        const upUserImage = await Profiles.getUsersById(userID, data,  async (err, response) => {
+        data.avatar = imageAsBase64
+        
+        const upUserImage = await profileModel.findByIdAndUpdate(userID, data,  async (err, response) => {
             if (err) {
                 res.status(500).send({
                     message: 'error modificando la imagen del usuario'

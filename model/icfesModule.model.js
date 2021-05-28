@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-
 const {Schema} = mongoose;
 
 //SCHEME OF THE MODULE COLLECTION
