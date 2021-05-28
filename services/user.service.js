@@ -9,17 +9,17 @@ const profileController = require('../Controller/profile.controller')
 const Ldapclient = {};
 const Estudiante = /OU=ESTUDIANTES/;
 const Docente = /OU=DOCENTES/;
-var userMail = '';
 var outcome;
 
 var fs = require('fs');
+const { stringify } = require('querystring');
 
 var imageAsBase64 = fs.readFileSync('./image/profile.png', 'base64');
 const buffer = Buffer.from(imageAsBase64, "base64");
 //console.log(imageAsBase64 , "  --->>   ",buffer)
 
 
-fs.writeFileSync("C:\\Users\\jubernal11\\OneDrive - Politécnico Grancolombiano\\Escritorio\\image\\x.png", buffer);
+//fs.writeFileSync("C:\\Users\\jubernal11\\OneDrive - Politécnico Grancolombiano\\Escritorio\\image\\x.png", buffer);
 
 
 function expregStatus(expreg, str) {
@@ -31,9 +31,9 @@ Ldapclient.authentication = async function (req, res) {
 
     if (req.body) {
         const usuario = new Usuario(req.body.email, req.body.password);
-        userMail = req.body.email;
-        console.log("Mail   -->", usuario.getMail());
-        console.log("Password  -->", usuario.getPassword());
+
+        //console.log("Mail   -->", usuario.getMail());
+        //console.log("Password  -->", usuario.getPassword());
 
         const cliente = ldap.createClient({
             url: 'ldap://192.168.4.10',
@@ -61,9 +61,14 @@ Ldapclient.authentication = async function (req, res) {
                     cliente.search('OU=usuarios, DC=poligran, DC=edu, DC=co', opts, (err, response) => {
 
                         assert.ifError(err);
-
+                        
                         response.on('searchEntry', (entry) => {
 
+                            //session with user name
+                            req.session.userName = entry.object.givenName;
+                            req.session.email = usuario.getMail();
+                            req.session.cuenta = 0;
+                            
                             res.json(entry.object);
 
                             outcome = expregStatus(Estudiante, entry.object.dn);
@@ -77,12 +82,10 @@ Ldapclient.authentication = async function (req, res) {
                                     console.log('NULL')
 
                             }
-
+                            
                             Ldapclient.profileUser(err, entry, outcome);
+                            
                         });
-
-                        //session with user name
-                        req.session.user = usuario.getMail()
 
                     });
 
@@ -100,23 +103,29 @@ Ldapclient.authentication = async function (req, res) {
 }
 
 Ldapclient.isAccessGrantedDocente = function (req, res, next) {
-    console.log("Salida de outcome ->", outcome[0])
-    console.log("isAccessGrantedDocente - GRANT USUARIO DE LA SESION->" + req.session.user + " " + userMail)
-    //if (req.session.user != userMail)
-      //  return res.status(401).end()
+    
+    console.log("isAccessGrantedDocente - GRANT USUARIO DE LA SESION->" + req.session.email)
+    if (req.session.email == undefined || null) {
+        req.session.destroy();
+        return res.status(401).end();
+    }
 
-    if (Docente != "/" + outcome[0] + "/") return res.status(401).end()
+    console.log("Salida de outcome ->", outcome[0])
+
+    if (Docente != "/" + outcome[0] + "/") 
+        return res.status(401).end()
     next()
 }
 
 Ldapclient.isAccessGrantedLogin = function (req, res, next) {
-    //Se requiere validar con la sesion también
-    console.log("isAccessGrantedLogin - GRANT USUARIO DE LA SESION >" + req.session.user + " " + userMail)
-    console.log(req.session);
-   // if (req.session.user != userMail)
-     //   return res.status(401).end()
+    
+    console.log("isAccessGrantedLogin - GRANT USUARIO DE LA SESION >" + req.session.email)
+    if (req.session.email == undefined || null) {
+        req.session.destroy();
+        return res.status(401).end();
+    }
 
-     console.log("outcome --> " ,outcome[0])
+    console.log("outcome --> " ,outcome[0])
 
     if (Docente != "/" + outcome[0] + "/" && Estudiante != "/" + outcome[0] + "/")
         return res.status(401).end()
@@ -126,17 +135,20 @@ Ldapclient.isAccessGrantedLogin = function (req, res, next) {
 Ldapclient.profileUser = function (err, entry, outcome) {
 
     profileClass = new ProfileClass(entry.object.givenName, entry.object.sn, entry.object.mail, outcome[0], imageAsBase64)
-
     const profileMongo = new Profile(profileClass);
+
     //console.log("Profile -- > ",profileMongo);
     profileController.createProfile(err, profileMongo);
     return profileMongo;
 };
 
 Ldapclient.destroySession = async function (req, res) {
-    console.log("session -- > ", req.session)
+    console.log("session -- > ", req.session) 
+    res.status(200).end()
+    //delete DB the sessions
     req.session.destroy(() => {
-        res.redirect('/') // will always fire after session is destroyed
+        res.status(200).end('logged out')
+        //res.redirect('/module') // will always fire after session is destroyed
     })
 }
 

@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(session({
     secret: process.env.SESSION_SECRET || 'some-secret', 
-    resave: false, // investigar mas -> https://www.npmjs.com/package/express-session 
+    resave: false, 
     saveUninitialized: false, 
     store: new MongoStore({ 
       mongooseConnection: mongoose.connection, 

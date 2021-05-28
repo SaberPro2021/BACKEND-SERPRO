@@ -4,7 +4,7 @@ const uriRedis = require('../database/db.connection');
 const IcfesModule = require('../model/icfesModule.model');
 const icfesTestModel = require('../model/icfesTest.model');
 const questionModel = require('../model/question.model');
-const clearCache = require('../services/cache.service')
+const clearCache = require('../services/cache.service');
 
 //CONTROLLER'S STATEMENT
 const ModuloController = {}; 
@@ -12,9 +12,9 @@ const ModuloController = {};
 //RETURN ALL MODULES
 ModuloController.getAllModules = async function(req, res) {
     try {
-    
+        
         req.session.cuenta = req.session.cuenta ? req.session.cuenta + 1 : 1 
-        console.log("ESTADO SESSION EN GET >"+req.session.cuenta +' '+ req.session.user)
+        console.log("ESTADO SESSION EN GET >"+req.session.id+' '+req.session.cuenta +' '+ req.session.email)
 
         const data = await IcfesModule.find().cache("Modules");
         res.json(data);
