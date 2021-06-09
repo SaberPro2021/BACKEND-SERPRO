@@ -12,6 +12,11 @@ const icfesTestController = {};
 icfesTestController.getTestByModule = async function(req, res) {
     try {
         const moduleId = req.params.moduleId;
+
+        if (req.session.modules.indexOf(moduleId)==-1) {
+            req.session.modules.push (moduleId)
+        }
+
         const data = await icfesTestModel.find({
            moduleId: ObjectId(moduleId)
         }).cache(moduleId)
@@ -49,6 +54,10 @@ icfesTestController.post = async function(req, res) {
 icfesTestController.getTestWhitQuestions = async function(req, res) {
 
     const test = req.params.testId;
+
+    if (req.session.tests.indexOf(test)==-1) {
+        req.session.tests.push (test)
+    }
 
     IcfesTest.findOne({_id: test},function(err, Tests) {
         Question.populate(Tests, { path: 'questions' }, function(err, Tests) {

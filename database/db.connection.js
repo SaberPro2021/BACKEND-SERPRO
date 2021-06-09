@@ -4,9 +4,9 @@ require('dotenv').config();
 const devUrl = `mongodb+srv://${dbconfig.USER}:${dbconfig.PASSWORD}@${dbconfig.HOST}/${dbconfig.DB}`;
 const prodUrl = `${process.env.MONGODB_DRIVER_STRING}://${process.env.MONGODB_USR}:${process.env.MONGODB_PWD}@${process.env.MONGODB_HOST}:${process.env.MONGODB_PORT}/${process.env.MONGODB_DBNAME}`;
 const env = process.env.APP_ENVIRONMENT;
-//const uri = process.env.MONGODB_URI || env == 'prod' ? prodUrl : devUrl;
+const uri = process.env.MONGODB_URI || env == 'prod' ? prodUrl : devUrl;
 
-const uri = "mongodb://localhost:27017/SaberPro";
+//const uri = "mongodb://localhost:27017/SaberPro";
 const uriRedis = {URL : 'redis://127.0.0.1:6379' };
 //const uri = "mongodb://serpro-database:27017/SaberPro";
 //mongodb://localhost:27017/SaberPro

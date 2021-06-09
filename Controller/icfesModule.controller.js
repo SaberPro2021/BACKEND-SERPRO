@@ -13,7 +13,7 @@ const ModuloController = {};
 ModuloController.getAllModules = async function(req, res) {
     try {
         
-        req.session.cuenta = req.session.cuenta ? req.session.cuenta + 1 : 1 
+        req.session.cuenta = req.session.cuenta ? req.session.cuenta + 1 : 1         
         console.log("ESTADO SESSION EN GET >"+req.session.id+' '+req.session.cuenta +' '+ req.session.email)
 
         const data = await IcfesModule.find().cache("Modules");

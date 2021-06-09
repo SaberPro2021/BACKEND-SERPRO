@@ -13,6 +13,7 @@ var outcome;
 
 var fs = require('fs');
 const { stringify } = require('querystring');
+const session = require('express-session');
 
 var imageAsBase64 = fs.readFileSync('./image/profile.png', 'base64');
 const buffer = Buffer.from(imageAsBase64, "base64");
@@ -67,7 +68,15 @@ Ldapclient.authentication = async function (req, res) {
                             req.session.userName = entry.object.givenName;
                             req.session.email = usuario.getMail();
                             req.session.cuenta = 0;
-                            
+                            req.session.modules = []
+                            req.session.tests = []
+                            if (req.session.modules.indexOf(10001)==-1) {
+                                req.session.modules.push (10001)
+                            }
+                            if (req.session.tests.indexOf(20002)==-1) {
+                                req.session.tests.push (20002)
+                            }
+
                             res.json(entry.object);
 
                             outcome = expregStatus(Estudiante, entry.object.dn);
@@ -143,6 +152,9 @@ Ldapclient.profileUser = function (err, entry, outcome) {
 
 Ldapclient.destroySession = async function (req, res) {
     console.log("session -- > ", req.session) 
+
+    //save mongodb
+
     res.status(200).end()
     //delete DB the sessions
     req.session.destroy(() => {
