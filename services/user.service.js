@@ -2,9 +2,13 @@ const ldap = require('ldapjs');
 const assert = require('assert');
 const Usuario = require('../model/loginClass.model');
 const Profile = require('../model/profile.model')
+const allVisitSessionClass = require('../model/allVisitSessionClass.model')
+const allVisitSession = require('../model/allVisitSession.model')
+
 const { encrypt, decrypt } = require('./crypto.service');
 const ProfileClass = require('../model/profileClass.model');
 const profileController = require('../Controller/profile.controller')
+const allVisitSessionController = require('../Controller/allVisitSession.controller')
 
 const Ldapclient = {};
 const Estudiante = /OU=ESTUDIANTES/;
@@ -77,6 +81,7 @@ Ldapclient.authentication = async function (req, res) {
                                 req.session.tests.push (20002)
                             }
 
+                            req.session.dateVisit = Date(Date.now());
                             res.json(entry.object);
 
                             outcome = expregStatus(Estudiante, entry.object.dn);
@@ -152,9 +157,10 @@ Ldapclient.profileUser = function (err, entry, outcome) {
 
 Ldapclient.destroySession = async function (req, res) {
     console.log("session -- > ", req.session) 
-
+    classAllVisitUser = new allVisitSessionClass(req.session.email, req.session.modules, req.session.tests, req.session.dateVisit)
+    const allVisitUserMongo = new allVisitSession(classAllVisitUser);
     //save mongodb
-
+    allVisitSessionController.SaveAllVisitSession(allVisitUserMongo)
     res.status(200).end()
     //delete DB the sessions
     req.session.destroy(() => {

@@ -6,6 +6,7 @@ const icfesModule = require('./Controller/icfesModule.controller');
 const icfesTest = require('./Controller/icfesTest.controller');
 const usuario = require('./services/user.service') ;
 const profile = require('./Controller/profile.controller');
+const AllVisitSession = require('./Controller/allVisitSession.controller');
 
 
 //ADDRESSING LIST
@@ -17,14 +18,14 @@ router.get('/question/:icfesModuleId',usuario.isAccessGrantedLogin, question.get
 router.get('/question/:icfesModuleId/:amount', usuario.isAccessGrantedLogin,question.getRandomByModule);
 router.post('/question', usuario.isAccessGrantedDocente,question.post);
 router.post('/questionUpdate/:questionId',usuario.isAccessGrantedDocente, question.updateQuestion);
-router.delete('/questionDelete',usuario.isAccessGrantedDocente, question.deleteQuestion)
-router.delete('/questionDelete/:questionId', usuario.isAccessGrantedDocente,question.deleteByIdQuestion)
+router.delete('/questionDelete',usuario.isAccessGrantedDocente, question.deleteQuestion);
+router.delete('/questionDelete/:questionId', usuario.isAccessGrantedDocente,question.deleteByIdQuestion);
 
 //AUTENTHICATION
 
 //router.get('/ldap',auth.t);
-router.post('/login', usuario.authentication)
-router.get('/logout', usuario.destroySession)
+router.post('/login', usuario.authentication);
+router.get('/logout', usuario.destroySession);
 
 //MODULE
 router.get('/module',usuario.isAccessGrantedLogin, icfesModule.getAllModules);
@@ -46,10 +47,12 @@ router.delete('/icfesTestDelete/:icfesTestId',usuario.isAccessGrantedDocente,icf
 
 /* PROFILE USER */
 
-router.get('/users', usuario.isAccessGrantedDocente, profile.getAllUsers )
-router.get('/users/:userId', usuario.isAccessGrantedDocente, profile.getUsersById)
-router.post('/userUpdate/:userId', usuario.isAccessGrantedDocente, profile.userUpdateImage)
+router.get('/users', usuario.isAccessGrantedDocente, profile.getAllUsers );
+router.get('/users/:userId', usuario.isAccessGrantedDocente, profile.getUsersById);
+router.post('/userUpdate/:userId', usuario.isAccessGrantedDocente, profile.userUpdateImage);
 
-
+/* Save All Visit Session */
+router.get('/GetAllVisitSession', AllVisitSession.getAllVistitSession );
+router.post('/SaveAllVisitSession', AllVisitSession.SaveAllVisitSession);
 
 module.exports = router;
