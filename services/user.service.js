@@ -34,6 +34,7 @@ function expregStatus(expreg, str) {
 
 Ldapclient.authentication = async function (req, res) {
 
+    
     if (req.body) {
         const usuario = new Usuario(req.body.email, req.body.password);
         //console.log("Mail   -->", usuario.getMail());
@@ -59,8 +60,11 @@ Ldapclient.authentication = async function (req, res) {
         try {
             cliente.bind(usuario.getMail(), decrypt(hash), async function (err) {
                 if (err) {
-                    console.log(err);
                     cliente.destroy(err);
+                    res.status(500).send({
+                        message: 'bad credentials'
+                    });
+
                 } else {
                     cliente.search('OU=usuarios, DC=poligran, DC=edu, DC=co', opts, (err, response) => {
 
@@ -132,12 +136,12 @@ Ldapclient.isAccessGrantedDocente = function (req, res, next) {
 
 Ldapclient.isAccessGrantedLogin = function (req, res, next) {
     
-    console.log("isAccessGrantedLogin - GRANT USUARIO DE LA SESION >" + req.session.email)
+/*     console.log("isAccessGrantedLogin - GRANT USUARIO DE LA SESION >" + req.session.email)
     if (req.session.email == undefined || null) {
         req.session.destroy();
         return res.status(401).end();
     }
-
+ */
     console.log("outcome --> " ,outcome[0])
 
     if (Docente != "/" + outcome[0] + "/" && Estudiante != "/" + outcome[0] + "/")

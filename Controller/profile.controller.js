@@ -1,4 +1,5 @@
 const profileModel  = require('../model/profile.model');
+const gradesModel = require('../model/grades.model');
 const { ObjectId } = require('mongodb');
 
 
@@ -81,5 +82,8 @@ Profiles.userUpdateImage = async function(req, res) {
         });
     }
 }
+
+
+
 
 module.exports = Profiles;

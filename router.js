@@ -7,6 +7,8 @@ const icfesTest = require('./Controller/icfesTest.controller');
 const usuario = require('./services/user.service') ;
 const profile = require('./Controller/profile.controller');
 const AllVisitSession = require('./Controller/allVisitSession.controller');
+const grades = require('./Controller/grades.controler');
+
 
 
 //ADDRESSING LIST
@@ -51,8 +53,16 @@ router.get('/users', usuario.isAccessGrantedDocente, profile.getAllUsers );
 router.get('/users/:userId', usuario.isAccessGrantedDocente, profile.getUsersById);
 router.post('/userUpdate/:userId', usuario.isAccessGrantedDocente, profile.userUpdateImage);
 
+
+
+
 /* Save All Visit Session */
 router.get('/GetAllVisitSession', AllVisitSession.getAllVistitSession );
 router.post('/SaveAllVisitSession', AllVisitSession.SaveAllVisitSession);
+
+
+
+/* GRADES */
+router.post('/Grade', grades.postGrades);
 
 module.exports = router;

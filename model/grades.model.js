@@ -9,11 +9,18 @@ const {Schema} = mongoose;
 //SCHEME OF THE MODULE COLLECTION
 const gradesSchema = new Schema ({
 
-    userId :{type:ObjectId, ref: Profile},
+
+    userId :String,
+    moduleId: String,
+    testId:String ,
+    time: Number,
+    score: String
+
+/*     userId :{type:ObjectId, ref: Profile},
     moduleId: {type:ObjectId, ref: IcfesModule},
     testId: {type:ObjectId, ref:IcfesTest},
     time: Number,
-    score: String
+    score: String */
 },{autoCreate: true});
 
 
