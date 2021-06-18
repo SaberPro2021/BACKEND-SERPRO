@@ -17,11 +17,9 @@ var outcome;
 
 var fs = require('fs');
 const { stringify } = require('querystring');
-const session = require('express-session');
 
 var imageAsBase64 = fs.readFileSync('./image/profile.png', 'base64');
-const buffer = Buffer.from(imageAsBase64, "base64");
-//console.log(imageAsBase64 , "  --->>   ",buffer)
+
 
 
 //fs.writeFileSync("C:\\Users\\jubernal11\\OneDrive - Politécnico Grancolombiano\\Escritorio\\image\\x.png", buffer);
@@ -73,6 +71,7 @@ Ldapclient.authentication = async function (req, res) {
                         response.on('searchEntry', (entry) => {
 
                             //session with user name
+                            console.log("Está es la session --- > ",req.session)
                             req.session.userName = entry.object.givenName;
                             req.session.email = usuario.getMail();
                             req.session.cuenta = 0;
@@ -86,6 +85,7 @@ Ldapclient.authentication = async function (req, res) {
                             }
 
                             req.session.dateVisit = Date(Date.now());
+
                             res.json(entry.object);
 
                             outcome = expregStatus(Estudiante, entry.object.dn);
