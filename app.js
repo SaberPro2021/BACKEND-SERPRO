@@ -11,7 +11,12 @@ const mongoose = require('mongoose')
 const MongoStore = require('connect-mongo')(session); // Se usa par aguardar las sessiones en mongodb 
 //middlewears
 app.use(helmet());
-app.use(cors());
+
+app.use(cors(
+  {origin: true,
+  credentials: true}
+  ));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -24,7 +29,6 @@ app.use(
       mongooseConnection: mongoose.connection,
     })
   }));
-
 
 
 //MAIN ROUTE

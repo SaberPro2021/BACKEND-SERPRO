@@ -86,7 +86,9 @@ Ldapclient.authentication = async function (req, res) {
 
                             req.session.dateVisit = Date(Date.now());
 
-                            res.json(entry.object);
+                            //console.log("response cookie-> ",req.sessionID,' ',req.session.userName)
+                            res.json(req.session)
+                            //res.json(entry.object);
 
                             outcome = expregStatus(Estudiante, entry.object.dn);
                             if (outcome != null)
@@ -135,13 +137,13 @@ Ldapclient.isAccessGrantedDocente = function (req, res, next) {
 }
 
 Ldapclient.isAccessGrantedLogin = function (req, res, next) {
-    
-/*     console.log("isAccessGrantedLogin - GRANT USUARIO DE LA SESION >" + req.session.email)
+        
+    console.log("isAccessGrantedLogin - GRANT USUARIO DE LA SESION >" + req.session.email)
     if (req.session.email == undefined || null) {
         req.session.destroy();
         return res.status(401).end();
     }
- */
+ 
     console.log("outcome --> " ,outcome[0])
 
     if (Docente != "/" + outcome[0] + "/" && Estudiante != "/" + outcome[0] + "/")
