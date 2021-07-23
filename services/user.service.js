@@ -88,6 +88,7 @@ Ldapclient.authentication = async function (req, res) {
 
                             //console.log("response cookie-> ",req.sessionID,' ',req.session.userName)
                             res.json(req.session)
+                            console.log(req.session)
                             //res.json(entry.object);
 
                             outcome = expregStatus(Estudiante, entry.object.dn);
