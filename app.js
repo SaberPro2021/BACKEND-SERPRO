@@ -25,6 +25,7 @@ app.use(
     secret: process.env.SESSION_SECRET || 'some-secret',
     resave: false,
     saveUninitialized: false,
+    cookie : {sameSite : "Lax"},
     store: new MongoStore({
       mongooseConnection: mongoose.connection,
     })
