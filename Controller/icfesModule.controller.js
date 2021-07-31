@@ -1,6 +1,5 @@
 require('../database/db.connection');
 const { ObjectId } = require('mongodb');
-const uriRedis = require('../database/db.connection');
 const IcfesModule = require('../model/icfesModule.model');
 const icfesTestModel = require('../model/icfesTest.model');
 const questionModel = require('../model/question.model');
@@ -13,15 +12,15 @@ const ModuloController = {};
 ModuloController.getAllModules = async function(req, res) {
     try {
         
-        req.session.cuenta = req.session.cuenta ? req.session.cuenta + 1 : 1         
-        console.log("ESTADO SESSION EN GET >"+req.session.id+' '+req.session.cuenta +' '+ req.session.email)
+        req.session.count = req.session.count ? req.session.count + 1 : 1         
+        //console.log("ESTADO SESSION EN GET >"+req.session.id+' '+req.session.count +' '+ req.session.email)
 
         const data = await IcfesModule.find().cache("Modules");
         res.json(data);
     } catch (err) {
         console.log(err);
         res.status(500).send({
-            message: 'some error ocurred'
+            message: 'error ModuloController.getAllModules'
         });
     }
 }
@@ -38,7 +37,7 @@ ModuloController.getModulesWithTests = async function(req, res) {
     } catch (err) {
         console.log(err);
         res.status(500).send({
-            message: 'some error ocurred'
+            message: 'error ModuloController.getModulesWithTests'
         });
     }
 }
@@ -51,14 +50,14 @@ ModuloController.createModule = async function(req, res) {
         icfesModules.save((err, response) => {
             if (err) {
                 res.status(500).send({
-                    message: 'error insertando modulo'
+                    message: 'error insert, ModuloController.createModule '
                 });
             }
             res.json(response);
         });
     } else {
         res.status(500).send({
-            message: 'error, the body is empty'
+            message: 'error ModuloController.createModule'
         });
     }
 }
@@ -75,13 +74,13 @@ ModuloController.saveAllModule = async function(req, res) {
         res.json(Listresult)
     } else {
         res.status(500).send({
-            message: 'error, the body is empty'
+            message: 'error, ModuloController.saveAllModule'
         });
     }
 }
 
 //DELETE MODULE
-ModuloController.deleteModules = async function(req, res) {
+ModuloController.deleteAllModules = async function(req, res) {
     try {
         clearCache("Modules")
         const delModul = await IcfesModule.remove();
@@ -89,7 +88,7 @@ ModuloController.deleteModules = async function(req, res) {
     } catch (err) { 
         console.log(err);
         res.status(500).send({
-            message: 'some error ocurred'
+            message: 'error, ModuloController.deleteAllModules'
         });
     }
 }
@@ -114,7 +113,7 @@ ModuloController.deleteByIdModule = async function(req, res) {
     } catch (err) { 
         console.log(err);
         res.status(500).send({
-            message: 'some error ocurred'
+            message: 'error, ModuloController.deleteByIdModule'
         });
     }
 }
@@ -136,7 +135,7 @@ ModuloController.updateModule = async function(req, res) {
         const upModul = await IcfesModule.findByIdAndUpdate(moduleId, data,  async (err, response) => {
             if (err) {
                 res.status(500).send({
-                    message: 'error modificando modulo'
+                    message: 'error update, ModuloController.updateModule'
                 });
             }
         });
@@ -144,7 +143,7 @@ ModuloController.updateModule = async function(req, res) {
     } catch (err) { 
         console.log(err);
         res.status(500).send({
-            message: 'some error ocurred'
+            message: 'error, ModuloController.updateModule'
         });
     }
 }

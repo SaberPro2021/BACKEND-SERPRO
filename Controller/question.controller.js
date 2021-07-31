@@ -9,7 +9,7 @@ const clearCache = require('../services/cache.service')
 const QuestionController = {};
 
 //FIND AND RETURN ALL QUESTIONS METHOD GET
-QuestionController.getAll = async function(req, res) {
+QuestionController.getAllQuestions = async function(req, res) {
    try{
         const questions = await Question.find().cache("Question");
         res.json(questions);
@@ -17,7 +17,7 @@ QuestionController.getAll = async function(req, res) {
    }catch (err) {
         console.log(err);
         res.status(500).send({
-            message: 'error ocurred making the query'
+            message: 'error, QuestionController.getAllQuestions'
         });
    }
 };
@@ -36,7 +36,7 @@ QuestionController.getQuestionById = async function(req, res) {
     }catch (err) {
          console.log(err);
          res.status(500).send({
-             message: 'error ocurred making the query'
+             message: 'error, QuestionController.getQuestionById'
          });
     }
  };
@@ -44,7 +44,7 @@ QuestionController.getQuestionById = async function(req, res) {
  
 
 //FIND AND RETURN ALL THE QUESTIONS OF A MODULE
-QuestionController.getByIcfesModul = async function(req, res) {
+QuestionController.getQuestionByModuleId = async function(req, res) {
     const icfesModuleId = req.params.icfesModuleId;
 
     try{
@@ -54,13 +54,13 @@ QuestionController.getByIcfesModul = async function(req, res) {
     }catch (err){
          console.log(err);
          res.status(500).send({
-             message: 'some error ocurred'
+             message: 'error, QuestionController.getQuestionByModuleId'
          });
     }
  };
 
 //CREATE A NEW QUESTION
-QuestionController.post = async function(req,res){
+QuestionController.createQuestion = async function(req,res){
     if(req.body){
         clearCache("Question")
 
@@ -70,7 +70,7 @@ QuestionController.post = async function(req,res){
             if(err){
                 console.log (err);
                 res.status(500).send({
-                    message:'error insertando preguntas'
+                    message:'error insert, QuestionController.createQuestion'
                 });
             }else {
                 res.send(savedDoc);
@@ -78,7 +78,7 @@ QuestionController.post = async function(req,res){
         });
     }else {
         res.status(500).send({
-            message:'error, the body is empty'
+            message:'error, QuestionController.createQuestion'
         });
     }  
 };
@@ -106,7 +106,7 @@ QuestionController.getRandomByModule = async function(req, res) {
     }catch(err){
          console.log(err);
          res.status(500).send({
-             message: 'some error ocurred'
+             message: 'error, QuestionController.getRandomByModule'
          });
     }
  };
@@ -114,7 +114,7 @@ QuestionController.getRandomByModule = async function(req, res) {
 
 
  // DELETE ALL QUESTIONS
- QuestionController.deleteQuestion = async function(req, res) {
+ QuestionController.deleteAllQuestion = async function(req, res) {
     try {
         clearCache("Question")
 
@@ -123,7 +123,7 @@ QuestionController.getRandomByModule = async function(req, res) {
     } catch (err) { 
         console.log(err);
         res.status(500).send({
-            message: 'some error ocurred'
+            message: 'error,  QuestionController.deleteAllQuestion'
         });
     }
 }
@@ -147,7 +147,7 @@ QuestionController.deleteByIdQuestion = async function(req, res) {
     } catch (err) { 
         console.log(err);
         res.status(500).send({
-            message: 'some error ocurred'
+            message: 'error, QuestionController.deleteByIdQuestion'
         });
     }
 }
@@ -169,7 +169,7 @@ QuestionController.updateQuestion = async function(req, res) {
         const upQuestion = await Question.findByIdAndUpdate(questionId, data,  async (err, response) => {
             if (err) {
                 res.status(500).send({
-                    message: 'error modificando icfesTest'
+                    message: 'error update QuestionController.updateQuestion'
                 });
             }
         });
@@ -177,7 +177,7 @@ QuestionController.updateQuestion = async function(req, res) {
     } catch (err) { 
         console.log(err);
         res.status(500).send({
-            message: 'some error ocurred'
+            message: 'error, QuestionController.updateQuestion '
         });
     }
 }

@@ -24,13 +24,13 @@ icfesTestController.getTestByModule = async function(req, res) {
     } catch (err) {
         console.log(err);
         res.status(500).send({
-            message: 'some error ocurred'
+            message: 'error, icfesTestController.getTestByModule'
         });
     }
 }
 
 //CREATING A NEW TEST
-icfesTestController.post = async function(req, res) {
+icfesTestController.createIcfesTest = async function(req, res) {
 
     if (req.body) {
         clearCache("")
@@ -38,14 +38,14 @@ icfesTestController.post = async function(req, res) {
         icfesTestController.save((err, response) => {
             if (err) {
                 response.status(500).send({
-                    message: 'error insertando preguntas'
+                    message: 'error insert icfesTestController.createIcfesTest'
                 });
             }
             res.send(response);
         });
     } else {
         res.status(500).send({
-            message: 'error, the body is empty'
+            message: 'error, icfesTestController.createIcfesTest'
         });
     }
 };
@@ -77,7 +77,7 @@ icfesTestController.getAllTestWhitQuestions = async function(req, res) {
 
 
 // DELETE ALL ICFESTEST
-icfesTestController.deleteIcfesTest = async function(req, res) {
+icfesTestController.deleteAllIcfesTest = async function(req, res) {
     try {
         clearCache("")
         const delIcfesTest = await IcfesTest.remove();
@@ -85,7 +85,7 @@ icfesTestController.deleteIcfesTest = async function(req, res) {
     } catch (err) { 
         console.log(err);
         res.status(500).send({
-            message: 'some error ocurred'
+            message: 'error, icfesTestController.deleteAllIcfesTest'
         });
     }
 }

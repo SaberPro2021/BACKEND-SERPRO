@@ -1,5 +1,4 @@
 const profileModel  = require('../model/profile.model');
-const gradesModel = require('../model/grades.model');
 const { ObjectId } = require('mongodb');
 
 
@@ -10,12 +9,12 @@ const Profiles = {};
 Profiles.createProfile = async function (err, profile) {
     
     const mail = profile.mail;
-    const perfil = await profileModel.findOne({mail})
-    if(!perfil){
-        console.log("Saving in DataBase -- > ", profile);
+    const profileExists = await profileModel.findOne({mail})
+    if(!profileExists){
+        //console.log("Saving in DataBase -- > ", profile);
         profile.save();
         if (err) {
-            console.log(err);
+            console.log(err,'Profiles.createProfile');
         }
     }
     else{
@@ -31,7 +30,7 @@ Profiles.getAllUsers = async function(req, res) {
     } catch (err) {
         console.log(err);
         res.status(500).send({
-            message: 'some error ocurred'
+            message: 'error, Profiles.getAllUsers'
         });
     }
 }
@@ -47,7 +46,7 @@ Profiles.getUsersById = async function(req, res) {
     }catch (err) {
          console.log(err);
          res.status(500).send({
-             message: 'error ocurred making the query'
+             message: 'error, Profiles.getUsersById'
          });
     }
  };
@@ -70,7 +69,7 @@ Profiles.userUpdateImage = async function(req, res) {
         const upUserImage = await profileModel.findByIdAndUpdate(userID, data,  async (err, response) => {
             if (err) {
                 res.status(500).send({
-                    message: 'error modificando la imagen del usuario'
+                    message: 'error update Profiles.userUpdateImage'
                 });
             }
         });
@@ -78,7 +77,7 @@ Profiles.userUpdateImage = async function(req, res) {
     } catch (err) { 
         console.log(err);
         res.status(500).send({
-            message: 'some error ocurred'
+            message: 'error, Profiles.userUpdateImage'
         });
     }
 }

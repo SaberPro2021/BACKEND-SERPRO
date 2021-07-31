@@ -9,7 +9,6 @@ const uri = process.env.MONGODB_URI || env == 'prod' ? prodUrl : devUrl;
 //const uri = "mongodb://localhost:27017/SaberPro";
 const uriRedis = {URL : 'redis://127.0.0.1:6379' };
 //const uri = "mongodb://serpro-database:27017/SaberPro";
-//mongodb://localhost:27017/SaberPro
 const db = mongoose.connection;
 
 //CONFIRMATION OF THE CONNECTION WITH THE DATABASE
