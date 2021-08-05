@@ -72,17 +72,16 @@ Ldapclient.authentication = async function (req, res) {
                             req.session.count = 0;
                             req.session.modules = []
                             req.session.tests = []
+
+                          
                             /*  attribute cookie with only values
                            if (req.session.modules.indexOf(10001)==-1) {
                                 req.session.modules.push (10001)
                             } */
 
                             req.session.dateVisit = Date(Date.now());
-
-                            //console.log("response cookie-> ",req.sessionID,' ',req.session.userName)
-                            res.json(req.session)
-                            console.log(req.session)
-                            //res.json(entry.object);
+                     
+                            
 
                             outcome = expregStatus(Estudiante, entry.object.dn);
                             if (outcome != null)
@@ -95,6 +94,12 @@ Ldapclient.authentication = async function (req, res) {
                                     console.log('NULL')
 
                             }
+
+                            req.session.job = outcome[0];
+                            //console.log("response cookie-> ",req.sessionID,' ',req.session.userName)
+                            res.json(req.session)
+                            console.log(req.session)
+                            //res.json(entry.object);
                             
                             Ldapclient.profileUser(err, entry, outcome);
                             
@@ -117,7 +122,7 @@ Ldapclient.authentication = async function (req, res) {
 
 Ldapclient.isAccessGrantedDocente = function (req, res, next) {
     
-    //console.log("isAccessGrantedDocente - GRANT USUARIO DE LA SESION->" + req.session.email)
+    console.log("isAccessGrantedDocente - GRANT USUARIO DE LA SESION->" + req.session.email)
     if (req.session.email == undefined || null) {
         req.session.destroy();
         return res.status(401).end();
