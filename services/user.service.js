@@ -30,8 +30,10 @@ Ldapclient.authentication = async function (req, res) {
     
     if (req.body) {
         const userCredentials = new Login(req.body.email, req.body.password);
-        //console.log("Mail   -->", userCredentials.getMail());
-        //console.log("Password  -->", userCredentials.getPassword());
+    /*  console.log("Mail   -->", userCredentials.getMail());
+        console.log("Password  -->", userCredentials.getPassword());
+    */
+        var getMailUser = userCredentials.getMail() +  "@poligran.edu.co";
 
         const clientLDAP = ldap.createClient({
             url: urlLDAP,
@@ -40,7 +42,7 @@ Ldapclient.authentication = async function (req, res) {
         });
 
         const opts = {
-            filter: '(mail=' + userCredentials.getMail() + '*)',
+            filter: '(mail=' +getMailUser + '*)',
             scope: 'sub',
             attributes: ["sn", "givenname", "mail"]
         }
@@ -51,7 +53,7 @@ Ldapclient.authentication = async function (req, res) {
         //console.log(text);
 
         try {
-            clientLDAP.bind(userCredentials.getMail(), decrypt(hash), async function (err) {
+            clientLDAP.bind(getMailUser, decrypt(hash), async function (err) {
                 if (err) {
                     clientLDAP.destroy(err);
                     res.status(500).send({
@@ -68,7 +70,7 @@ Ldapclient.authentication = async function (req, res) {
                             //session with user name
                            
                             req.session.userName = entry.object.givenName;
-                            req.session.email = userCredentials.getMail();
+                            req.session.email = getMailUser;
                             req.session.count = 0;
                             req.session.modules = []
                             req.session.tests = []
