@@ -34,28 +34,25 @@ Profiles.getAllUsers = async function(req, res) {
         });
     }
 }
-Profiles.getUsersById = async function(req, res) {
-    try{
-        const userID = req.params.userId;
-        console.log(userID)
+Profiles.getUsersById = async function(Mail) {
+         
+        const mailID = Mail;       
+     
         const data = await profileModel.find({
-            _id: ObjectId(userID)
-        }).cache(userID);
-        res.send(data);
- 
-    }catch (err) {
-         console.log(err);
-         res.status(500).send({
-             message: 'error, Profiles.getUsersById'
-         });
-    }
+            mail: (mailID)
+        })
+        
+       
+        return data[0].avatar;
+
  };
 
 Profiles.userUpdateImage = async function(req, res) {
     try {
         const userID = req.params.userId;
         const User = new profileModel(req.body);
-    
+
+        
         var data = {
             avatar : User.avatar
         }
@@ -65,7 +62,7 @@ Profiles.userUpdateImage = async function(req, res) {
         var imageAsBase64 = fs.readFileSync(data.avatar, 'base64');
 
         data.avatar = imageAsBase64
-        
+
         const upUserImage = await profileModel.findByIdAndUpdate(userID, data,  async (err, response) => {
             if (err) {
                 res.status(500).send({

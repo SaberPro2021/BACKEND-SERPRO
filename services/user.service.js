@@ -5,7 +5,10 @@ const Profile = require('../model/profile.model')
 const allVisitSessionClass = require('../model/allVisitSessionClass.model')
 const allVisitSessionModel = require('../model/allVisitSession.model')
 
-const { encrypt, decrypt } = require('./crypto.service');
+const {
+    encrypt,
+    decrypt
+} = require('./crypto.service');
 const ProfileClass = require('../model/profileClass.model');
 const profileController = require('../Controller/profile.controller')
 const allVisitSessionController = require('../Controller/allVisitSession.controller')
@@ -14,7 +17,9 @@ const Ldapclient = {};
 const Estudiante = /OU=ESTUDIANTES/;
 const Docente = /OU=DOCENTES/;
 const urlLDAP = 'ldap://192.168.4.10';
+
 var outcome;
+var imageSessionGlobal;
 
 var fs = require('fs');
 
@@ -27,13 +32,29 @@ function expregStatus(expreg, str) {
 
 Ldapclient.authentication = async function (req, res) {
 
-    
+
     if (req.body) {
         const userCredentials = new Login(req.body.email, req.body.password);
-    /*  console.log("Mail   -->", userCredentials.getMail());
-        console.log("Password  -->", userCredentials.getPassword());
-    */
-        var getMailUser = userCredentials.getMail() +  "@poligran.edu.co";
+        /*  console.log("Mail   -->", userCredentials.getMail());
+            console.log("Password  -->", userCredentials.getPassword());
+        */
+        var getMailUser = userCredentials.getMail() + "@poligran.edu.co";
+
+
+        imageUserProfileMongo = profileController.getUsersById(getMailUser);
+
+        imageUserProfileMongo.then(function (result) {
+
+            //image2 = result;
+            imageSessionGlobal = result;
+
+
+        })
+
+        console.log("result  imageSessionGlobal -> ", imageSessionGlobal)
+
+
+
 
         const clientLDAP = ldap.createClient({
             url: urlLDAP,
@@ -42,7 +63,7 @@ Ldapclient.authentication = async function (req, res) {
         });
 
         const opts = {
-            filter: '(mail=' +getMailUser + '*)',
+            filter: '(mail=' + getMailUser + '*)',
             scope: 'sub',
             attributes: ["sn", "givenname", "mail"]
         }
@@ -64,26 +85,47 @@ Ldapclient.authentication = async function (req, res) {
                     clientLDAP.search('OU=usuarios, DC=poligran, DC=edu, DC=co', opts, (err, response) => {
 
                         assert.ifError(err);
-                        
+
                         response.on('searchEntry', (entry) => {
 
                             //session with user name
-                           
+
                             req.session.userName = entry.object.givenName;
                             req.session.email = getMailUser;
+                            /* imageUserProfileMongo = profileController.getUsersById(getMailUser);
+                            let image;
+                            imageUserProfileMongo.then(function (result) {
+                               
+                                //image2 = result;
+                                image = result;
+                               
+                                                         
+                            }) 
+                            if (imageSessionGlobal = undefined){
+                                req.session.image = imageAsBase64;
+                            }       
+                            else{
+                                  req.session.image = imageSessionGlobal;
+                                 console.log("result  session=? -> ", req.session.image)
+                            }       */
+
+                            req.session.image = imageSessionGlobal;
+                           
+
+
                             req.session.count = 0;
                             req.session.modules = []
                             req.session.tests = []
 
-                          
+
                             /*  attribute cookie with only values
                            if (req.session.modules.indexOf(10001)==-1) {
                                 req.session.modules.push (10001)
                             } */
 
                             req.session.dateVisit = Date(Date.now());
-                     
-                            
+
+
 
                             outcome = expregStatus(Estudiante, entry.object.dn);
                             if (outcome != null)
@@ -98,13 +140,15 @@ Ldapclient.authentication = async function (req, res) {
                             }
 
                             req.session.job = outcome[0];
+
+
                             //console.log("response cookie-> ",req.sessionID,' ',req.session.userName)
                             res.json(req.session)
-                            console.log(req.session)
+                            //console.log(req.session)
                             //res.json(entry.object);
-                            
+
                             Ldapclient.profileUser(err, entry, outcome);
-                            
+
                         });
 
                     });
@@ -123,26 +167,26 @@ Ldapclient.authentication = async function (req, res) {
 }
 
 Ldapclient.isAccessGrantedDocente = function (req, res, next) {
-    
+
     console.log("isAccessGrantedDocente - GRANT USUARIO DE LA SESION->" + req.session.email)
     if (req.session.email == undefined || null) {
         req.session.destroy();
         return res.status(401).end();
     }
 
-    if (Docente != "/" + outcome[0] + "/") 
+    if (Docente != "/" + outcome[0] + "/")
         return res.status(401).end()
     next()
 }
 
 Ldapclient.isAccessGrantedLogin = function (req, res, next) {
-        
+
     //console.log("isAccessGrantedLogin - GRANT USUARIO DE LA SESION >" + req.session.email)
     if (req.session.email == undefined || null) {
         req.session.destroy();
         return res.status(401).end();
     }
- 
+
     if (Docente != "/" + outcome[0] + "/" && Estudiante != "/" + outcome[0] + "/")
         return res.status(401).end()
     next()
