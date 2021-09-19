@@ -3,12 +3,14 @@ require('../database/db.connection');
 const IcfesModule = require('../model/icfesModule.model');
 const icfesTestModel = require('../model/icfesTest.model');
 const allVisitSessionModel = require('../model/allVisitSession.model');
+const VisitSessionModel = require('../model/allVisitSession.model');
 
 const AllVisitSessionController = {};
 
 AllVisitSessionController.getAllVistitSession = async function (req, res) {
+  
     try {
-        const data = await allVisitSession.find().cache("Modules");
+        const data = await allVisitSessionModel.find().cache("Modules");
         res.json(data);
     } catch (err) {
         console.log(err);
@@ -40,6 +42,30 @@ AllVisitSessionController.SaveAllVisitSession = async function (profile) {
         upAllSession.save();
     }
 
+}
+
+
+
+
+
+AllVisitSessionController.VisitSessionById = async function (req, res) {
+  
+    try {
+        const mail = req.params.userEmail;
+        console.log("data session email", mail)
+        const data = await allVisitSessionModel.find({
+            email: mail
+         })
+         console.log("data session email", data)
+         res.send(data);
+        
+       
+    } catch (err) {
+        console.log(err);
+        res.status(500).send({
+            message: 'error AllVisitSessionController.VisitSessionById'
+        });
+    }
 }
 
 
