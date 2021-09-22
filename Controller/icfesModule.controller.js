@@ -11,7 +11,6 @@ const ModuloController = {};
 //RETURN ALL MODULES
 ModuloController.getAllModules = async function(req, res) {
     try {
-        
         req.session.count = req.session.count ? req.session.count + 1 : 1         
         //console.log("ESTADO SESSION EN GET >"+req.session.id+' '+req.session.count +' '+ req.session.email)
 

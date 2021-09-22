@@ -11,11 +11,18 @@ const icfesTestController = {};
 //RETURN 
 icfesTestController.getTestByModule = async function(req, res) {
     try {
-        const moduleId = req.params.moduleId;
 
-        if (req.session.modules.indexOf(moduleId)==-1) {
-            req.session.modules.push (moduleId)
-        }
+        let moduleId = req.params.moduleId;
+        
+        //console.log("before",moduleId.endsWith(';'))
+
+        if (!moduleId.endsWith(';')) {
+            if (req.session.modules.indexOf(moduleId)==-1)
+                req.session.modules.push (moduleId)
+        } else
+            moduleId = moduleId.substring(0,moduleId.length-1)
+        
+        //console.log("after",moduleId)
 
         const data = await icfesTestModel.find({
            moduleId: ObjectId(moduleId)
