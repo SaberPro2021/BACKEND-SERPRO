@@ -7,7 +7,7 @@ const VisitSessionModel = require('../model/allVisitSession.model');
 
 const AllVisitSessionController = {};
 
-AllVisitSessionController.getAllVistitSession = async function (req, res) {
+AllVisitSessionController.getAllVisitSession = async function (req, res) {
   
     try {
         const data = await allVisitSessionModel.find().cache("Modules");
@@ -15,7 +15,7 @@ AllVisitSessionController.getAllVistitSession = async function (req, res) {
     } catch (err) {
         console.log(err);
         res.status(500).send({
-            message: 'error AllVisitSessionController.getAllVistitSession'
+            message: 'error AllVisitSessionController.getAllVisitSession'
         });
     }
 }
@@ -45,9 +45,6 @@ AllVisitSessionController.SaveAllVisitSession = async function (profile) {
 }
 
 
-
-
-
 AllVisitSessionController.VisitSessionById = async function (req, res) {
   
     try {
@@ -58,8 +55,6 @@ AllVisitSessionController.VisitSessionById = async function (req, res) {
          })
          console.log("data session email", data)
          res.send(data);
-        
-       
     } catch (err) {
         console.log(err);
         res.status(500).send({

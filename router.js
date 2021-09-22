@@ -55,11 +55,10 @@ router.post('/userUpdate/:userId', usuario.isAccessGrantedLogin, profile.userUpd
 
 
 
-
 /* Save All Visit Session */
-router.get('/GetAllVisitSession', AllVisitSession.getAllVistitSession );
+router.get('/GetAllVisitSession', AllVisitSession.getAllVisitSession );
+router.get('/GetSessionByid/:userEmail', AllVisitSession.VisitSessionById );
 router.post('/SaveAllVisitSession', AllVisitSession.SaveAllVisitSession);
-router.post('/GetSessionByid/:userEmail', AllVisitSession.VisitSessionById );
 
 
 
