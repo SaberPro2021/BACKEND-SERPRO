@@ -1,0 +1,87 @@
+version: "3.8"
+
+services:
+    serpro-api:
+        build: ./BACK_END_APP_SERPRO/
+        image: img-serpro-api
+        container_name: serpro-api
+        environment:
+            APP_ENVIRONMENT: 'prod'
+            MONGODB_PORT: ${PORT_SERPRO_DB}
+            MONGODB_DBNAME: "SaberPro"
+            MONGODB_HOST: "serpro-database"
+            MONGODB_DRIVER_STRING: "mongodb"
+            MONGODB_USR: ${DB_APP_USR}
+            MONGODB_PWD: ${DB_APP_PWD}
+        depends_on:
+            - serpro-database
+        ports:
+            - ${PORT_SERPRO_API}:3000
+        networks: 
+            - serpronet
+
+    serpro-database:
+        image: mongo
+        container_name: serpro-database
+        command: mongod --port ${PORT_SERPRO_DB}
+        environment:
+            MONGO_INITDB_DATABASE: SaberPro
+            MONGO_INITDB_ROOT_USERNAME: ${DB_ADM_USR}
+            MONGO_INITDB_ROOT_PASSWORD: ${DB_ADM_PWD}
+        ports:
+            - ${PORT_SERPRO_DB}:${PORT_SERPRO_DB}
+        volumes:
+            - serpro-db-data:/data/db
+            - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+        networks: 
+            - serpronet
+
+    mongo-express:
+        image: mongo-express
+        container_name: mongo-express
+        restart: always
+        ports:
+            - ${PORT_MONGO_EXPRESS}:8081
+        depends_on:
+            - serpro-database
+        environment:
+            ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_EXPRESS_USR}
+            ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_EXPRESS_PWD}
+            ME_CONFIG_MONGODB_ENABLE_ADMIN: 'true'
+            ME_CONFIG_MONGODB_SERVER: serpro-database
+            ME_CONFIG_MONGODB_PORT: ${PORT_SERPRO_DB}
+            ME_CONFIG_MONGODB_ADMINUSERNAME: ${DB_ADM_USR} 
+            ME_CONFIG_MONGODB_ADMINPASSWORD: ${DB_ADM_PWD}
+        networks: 
+            - serpronet
+
+    serpro-app:
+        build: ./FRONT_APP_SERPRO/
+        image: img-serpro-app
+        container_name: serpro-app
+        environment:
+            SERPRO_API_URL: "${HOST_API_ADDRSS}:${PORT_SERPRO_API}"
+        depends_on:
+            - serpro-api
+        ports:
+            - ${PORT_SERPRO_APP}:80
+        networks: 
+            - serpronet
+
+    serpro-admin-app:
+        build: ./FRONT_ADMIN_SERPRO/
+        image: img-serpro-admin
+        container_name: serpro-admin
+        environment:
+            SERPRO_API_URL: "${HOST_API_ADDRSS}:${PORT_SERPRO_API}"
+        depends_on:
+            - serpro-api
+        ports:
+            - ${PORT_SERPRO_ADMIN}:80
+        networks: 
+            - serpronet
+
+volumes:
+    serpro-db-data:
+networks:
+    serpronet:
