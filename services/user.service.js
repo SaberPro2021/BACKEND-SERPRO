@@ -22,6 +22,7 @@ var outcome;
 var imageSessionGlobal;
 
 var fs = require('fs');
+const { exit } = require('process');
 
 var imageAsBase64 = fs.readFileSync('./image/profile.png', 'base64');
 
@@ -35,12 +36,16 @@ Ldapclient.authentication = async function (req, res) {
 
     if (req.body) {
         const userCredentials = new Login(req.body.email, req.body.password);
-        /*  console.log("Mail   -->", userCredentials.getMail());
-            console.log("Password  -->", userCredentials.getPassword());
-        */
+        
+        if (req.body.email == null || req.body.password == null) {
+            res.status(500).send({
+                message: 'Credenciales erróneas. La combinación de usuario y contraseña es incorrecta'
+            });
+            return exit;
+        }
+        
         var getMailUser = userCredentials.getMail() + "@poligran.edu.co";
-
-
+        /*
         imageUserProfileMongo = profileController.getUsersById(getMailUser);
 
         imageUserProfileMongo.then(function (result) {
@@ -48,14 +53,10 @@ Ldapclient.authentication = async function (req, res) {
             //image2 = result;
             imageSessionGlobal = result;
 
-
         })
 
         console.log("result  imageSessionGlobal -> ", imageSessionGlobal)
-
-
-
-
+        */
         const clientLDAP = ldap.createClient({
             url: urlLDAP,
             timeout: 5000,
@@ -78,16 +79,28 @@ Ldapclient.authentication = async function (req, res) {
                 if (err) {
                     clientLDAP.destroy(err);
                     res.status(500).send({
-                        message: 'bad credentials'
+                        message: 'Credenciales erróneas. La combinación de usuario y contraseña es incorrecta'
                     });
-
+                    return exit;
                 } else {
+                   
+
                     clientLDAP.search('OU=usuarios, DC=poligran, DC=edu, DC=co', opts, (err, response) => {
 
                         assert.ifError(err);
+                        if (err) 
+                            console.log(err);
+                        
+                        response.on('error', (err) => {
+                            clientLDAP.destroy(err);
+                            console.error('ldap search searchEntry error', err.message);
+                            res.status(500).send({
+                                message: 'Credenciales erróneas. La combinación de usuario y contraseña es incorrecta'
+                            });
+                            return exit;
+                        });
 
-                        response.on('searchEntry', (entry) => {
-
+                        response.on('searchEntry', (entry) => {   
                             //session with user name
 
                             req.session.userName = entry.object.givenName;
@@ -146,7 +159,7 @@ Ldapclient.authentication = async function (req, res) {
                             res.json(req.session)
                             //console.log(req.session)
                             //res.json(entry.object);
-
+                            
                             Ldapclient.profileUser(err, entry, outcome);
 
                         });
@@ -156,12 +169,14 @@ Ldapclient.authentication = async function (req, res) {
                 }
             });
         } catch (e) {
-            console.log('Bind failed');
+            clientLDAP.destroy(e);
+            console.log('Bind failed', e);
         }
 
     } else {
+        clientLDAP.destroy();
         res.status(500).send({
-            message: 'error, the body is empty'
+            message: 'Error, the body is empty'
         });
     }
 }
@@ -175,7 +190,7 @@ Ldapclient.isAccessGrantedDocente = function (req, res, next) {
     }
 
     if (Docente != "/" + outcome[0] + "/")
-        return res.status(401).end()
+        return res.status(401).end();
     next()
 }
 
@@ -183,12 +198,12 @@ Ldapclient.isAccessGrantedLogin = function (req, res, next) {
 
     //console.log("isAccessGrantedLogin - GRANT USUARIO DE LA SESION >" + req.session.email)
     if (req.session.email == undefined || null) {
-        req.session.destroy();
+        req.session.destroy(); 
         return res.status(401).end();
     }
 
     if (Docente != "/" + outcome[0] + "/" && Estudiante != "/" + outcome[0] + "/")
-        return res.status(401).end()
+        return res.status(401).end();
     next()
 }
 
