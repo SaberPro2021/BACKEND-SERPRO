@@ -1,13 +1,13 @@
 const router = require('express').Router();
 
 //CONTROLLER LIST
-const question = require('./Controller/question.controller');
-const icfesModule = require('./Controller/icfesModule.controller');
-const icfesTest = require('./Controller/icfesTest.controller');
+const question = require('./controller/question.controller');
+const icfesModule = require('./controller/icfesModule.controller');
+const icfesTest = require('./controller/icfesTest.controller');
 const usuario = require('./services/user.service') ;
-const profile = require('./Controller/profile.controller');
-const AllVisitSession = require('./Controller/allVisitSession.controller');
-const score = require('./Controller/score.controler');
+const profile = require('./controller/profile.controller');
+const AllVisitSession = require('./controller/allVisitSession.controller');
+const score = require('./controller/score.controller');
 
 
 
@@ -63,6 +63,8 @@ router.post('/SaveAllVisitSession', AllVisitSession.SaveAllVisitSession);
 
 
 /* score */
+router.get('/Grade/:userId', score.getScoreByUserTestModuleId);
 router.post('/Grade', score.postScore);
+
 
 module.exports = router;

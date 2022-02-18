@@ -6,10 +6,10 @@ const {Schema} = mongoose;
 const scoreSchema = new Schema ({
 
     userId :String,
+    testId:String,
     moduleId: String,
-    testId:String ,
-    time: String,
     score: Number,
+    time: Number,
     date: String
 
 },{autoCreate: true});
