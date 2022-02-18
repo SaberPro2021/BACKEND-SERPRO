@@ -59,8 +59,10 @@ Ldapclient.authentication = async function (req, res) {
         */
         const clientLDAP = ldap.createClient({
             url: urlLDAP,
-            timeout: 5000,
-            connectTimeout: 10000
+            reconnect: true,
+            idleTimeout: 3000 
+            //timeout: 5000,
+            //connectTimeout: 10000
         });
 
         const opts = {
