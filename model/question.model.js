@@ -15,7 +15,8 @@ const questionSchema = new Schema ({
     icfesModuleId: {type:ObjectId, ref: IcfesModule},
     answers:[Answer], 
     feedback:String,
-    questionType: String
+    questionType: String,
+    imageQuestion: String
 });
 
 module.exports = mongoose.model('questions',questionSchema);

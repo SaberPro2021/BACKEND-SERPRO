@@ -7,7 +7,8 @@ const icfesModuleSchema = new Schema ({
     knowledgeArea: String,
     type: String,
     description: String,
-    evaluate: String
+    evaluate: String,
+    imageModule: String
 },{autoCreate: true});
 
 
