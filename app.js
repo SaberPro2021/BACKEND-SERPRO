@@ -20,7 +20,12 @@ app.use(cors(
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use(
+var bodyParser = require('body-parser');
+app.use(bodyParser.json({ limit: '100mb' }));
+app.use(bodyParser.urlencoded({ limit: '100mb', extended: true, parameterLimit: 5000000 }));
+
+
+app.use(  
   session({
     secret: process.env.SESSION_SECRET || 'some-secret',
     resave: false,

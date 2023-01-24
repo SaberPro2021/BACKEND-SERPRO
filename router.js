@@ -66,5 +66,9 @@ router.post('/SaveAllVisitSession', AllVisitSession.SaveAllVisitSession);
 router.get('/Grade/:userId', score.getScoreByUserTestModuleId);
 router.post('/Grade', score.postScore);
 
+var bodyParser = require('body-parser');
+router.use(bodyParser.json({ limit: '50mb' }));
+router.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 module.exports = router;
+

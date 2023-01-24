@@ -21,9 +21,6 @@ QuestionController.getAllQuestions = async function(req, res) {
         });
    }
 };
-
-
-
 //FIND AND RETURN BY YD QUESTIONS
 QuestionController.getQuestionById = async function(req, res) {
     try{
@@ -65,6 +62,7 @@ QuestionController.createQuestion = async function(req,res){
         clearCache("Question")
 
         const question = new Question(req.body);
+        console.log(question);
       
         question.save((err,savedDoc)=>{
             if(err){

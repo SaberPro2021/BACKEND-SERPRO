@@ -11,7 +11,9 @@ const ModuloController = {};
 //RETURN ALL MODULES
 ModuloController.getAllModules = async function(req, res) {
     try {
-        req.session.count = req.session.count ? req.session.count + 1 : 1         
+
+        req.session.count = req.session.count ? req.session.count + 1 : 1        
+        console.log(req.session.count) 
         //console.log("ESTADO SESSION EN GET >"+req.session.id+' '+req.session.count +' '+ req.session.email)
 
         const data = await IcfesModule.find().cache("Modules");
@@ -43,9 +45,13 @@ ModuloController.getModulesWithTests = async function(req, res) {
 
 //CREATE A NEW MODULE
 ModuloController.createModule = async function(req, res) {
+    console.log('createModule');
+    console.log(req.body);
+    
     if (req.body) {
         clearCache("Modules")
         const icfesModules = new IcfesModule(req.body);
+        console.log(icfesModules);
         icfesModules.save((err, response) => {
             if (err) {
                 res.status(500).send({
@@ -63,6 +69,7 @@ ModuloController.createModule = async function(req, res) {
 
 //CREATE A NEW MODULE BY A LIST
 ModuloController.saveAllModule = async function(req, res) {
+    console.log('saveAllModule');
     if (req.body) {
         let Listresult = [];
         for (let item of req.body) {
