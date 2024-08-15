@@ -10,8 +10,8 @@ const {
     decrypt
 } = require('./crypto.service');
 const ProfileClass = require('../model/profileClass.model');
-const profileController = require('../Controller/profile.controller')
-const allVisitSessionController = require('../Controller/allVisitSession.controller')
+const profileController = require('../controller/profile.controller')
+const allVisitSessionController = require('../controller/allVisitSession.controller')
 
 const Ldapclient = {};
 const Estudiante = /OU=ESTUDIANTES/;
