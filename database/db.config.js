@@ -1,8 +1,9 @@
 //DATA BASE CONFIG OBJECT 
 const dbconfig = {
-    HOST: "cluster.75pse.mongodb.net",
+    HOST: "localhost",
     USER: "saberProPoli",
-    PASSWORD: "6sXyfujsZ55c4GF",
+    PASSWORD: "development",
+    PORT: "12207",
     DB: "SaberPro"
 };
 
