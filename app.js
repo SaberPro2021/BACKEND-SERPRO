@@ -12,8 +12,9 @@ const MongoStore = require('connect-mongo')(session); // Se usa par aguardar las
 //middlewears
 app.use(helmet());
 
-app.use(cors(
-  {origin: true,
+app.use(cors({
+  origin: true,
+  allowedHeaders: ["Content-Type", "Authorization", "Access-Control-Allow-Methods", "Access-Control-Request-Headers"],
   credentials: true}
   ));
 
@@ -30,7 +31,7 @@ app.use(
     secret: process.env.SESSION_SECRET || 'some-secret',
     resave: false,
     saveUninitialized: false,
-    cookie : {sameSite : "Lax"},
+    cookie : {sameSite : "Lax", secure: false},
     store: new MongoStore({
       mongooseConnection: mongoose.connection,
     })
