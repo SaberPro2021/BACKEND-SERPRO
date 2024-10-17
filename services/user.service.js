@@ -35,7 +35,7 @@ Ldapclient.authentication = async function (req, res) {
 
     if (req.body) {
         const userCredentials = new Login(req.body.email, req.body.password);
-
+        
         if (req.body.email == null || req.body.password == null) {
             res.status(500).send({
                 message: 'Credenciales erróneas. La combinación de usuario y contraseña es incorrecta'
@@ -66,13 +66,13 @@ Ldapclient.authentication = async function (req, res) {
             attributes: ["sn", "givenname", "mail"]
         }
 
-        const hash = encrypt(userCredentials.getPassword());
+        //const hash = encrypt(userCredentials.getPassword());
         //console.log(hash);
-        const text = decrypt(hash);
+        //const text = decrypt(hash);
         //console.log(text);
 
         try {
-            clientLDAP.bind(getMailUser, decrypt(hash), async function (err) {
+            clientLDAP.bind(getMailUser, atob(userCredentials.getPassword()), async function (err) {
                 if (err) {
                     clientLDAP.destroy(err);
                     res.status(500).send({
